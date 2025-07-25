@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using tasinmazBackend.Models;
+
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace tasinmazBackend.Entitiy
 {
