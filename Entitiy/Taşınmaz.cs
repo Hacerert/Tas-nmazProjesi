@@ -1,4 +1,4 @@
-﻿using tasinmazBackend.Models;
+﻿
 
 using System.ComponentModel.DataAnnotations.Schema;
 

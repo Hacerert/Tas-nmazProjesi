@@ -1,4 +1,4 @@
-﻿using tasinmazBackend.Models;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +26,7 @@ namespace tasinmazBackend.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDto dto)
         {
-            var user = _userService.ValidateUser(dto.Email, dto.Password);
+            var user = _userService.ValidateUser(dto.Username, dto.Password);
             if (user == null)
                 return Unauthorized("Kullanıcı adı veya şifre hatalı.");
 

@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Text;
 using tasinmazBackend.Data;
 using tasinmazBackend.Dtos;
 using tasinmazBackend.Entitiy;
 using tasinmazBackend.Services.Interfaces;
+using System.Security.Cryptography;
+
 
 namespace tasinmazBackend.Services
 {
@@ -26,7 +29,7 @@ namespace tasinmazBackend.Services
             {
                 UserName = dto.Username,
                 Email = dto.Email,
-                PasswordHash = hashedPassword,
+                Password = hashedPassword,
                 Role = "User"
             };
 
@@ -46,7 +49,7 @@ namespace tasinmazBackend.Services
                 return false;
             }
 
-            bool result = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+            bool result = BCrypt.Net.BCrypt.Verify(password, user.Password);
 
             if (!result)
             {
@@ -61,14 +64,38 @@ namespace tasinmazBackend.Services
         }
 
         // İşte JWT login için yeni metod:
-        public User? ValidateUser(string username, string password)
+        //public User? ValidateUser(string userName, string password)
+        //{
+        //    var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
+        //    if (user == null)
+        //        return null;
+
+        //    bool verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
+        //    return verified ? user : null;
+        //}
+
+        public string ComputeSha256Hash(string rawData)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username);
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); //burda şunu yapıyo
+                StringBuilder builder = new StringBuilder();
+                foreach (byte b in bytes)
+                    builder.Append(b.ToString("x2"));
+                return builder.ToString();
+            }
+        }
+
+        public User? ValidateUser(string userName, string password)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.UserName == userName); // username e göre user alma
             if (user == null)
                 return null;
 
-            bool verified = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-            return verified ? user : null;
+            string hashedInputPassword = ComputeSha256Hash(password);
+
+            return hashedInputPassword == user.Password ? user : null;
         }
+
     }
 }

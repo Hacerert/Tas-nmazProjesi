@@ -11,12 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-// CORS Policy (Angular frontend için)
+// CORS Policy (GEÇİCİ OLARAK TÜM KAYNAKLARA İZİN VERİYORUZ - DEBUG AMAÇLI)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
+    options.AddPolicy("AllowAllOrigins", policy => // Politika adını değiştirdik
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.AllowAnyOrigin() // Tüm kaynaklardan gelen isteklere izin ver
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -75,15 +75,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAngularApp");
-
 app.UseHttpsRedirection();
 
-app.UseAuthentication();  // JWT Authentication middleware'i ekle
+// CORS middleware'i, kimlik doğrulama/yetkilendirme middleware'lerinden ÖNCE gelmeli
+app.UseCors("AllowAllOrigins"); // Politika adını değiştirdik ve buraya uyguladık
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-// İstersen buraya veri ekleme kodlarını koyabilirsin (daha önce verdiğin gibi)
 
 app.Run();

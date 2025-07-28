@@ -1,5 +1,4 @@
 ﻿using tasinmazBackend.Entitiy;
-using tasinmazBackend.Models;
 
 namespace tasinmazBackend.Services.Interfaces
 {

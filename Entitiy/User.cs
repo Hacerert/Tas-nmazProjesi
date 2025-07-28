@@ -6,8 +6,8 @@
         public string UserName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public ICollection<Tasinmaz>? Tasinmazlar { get; set; }
-        public string PasswordHash { get; set; } = null!;
+        public string Password { get; set; } = null!; // PasswordHash yerine Password olarak düzeltildi
 
-        public string Role { get; set; } = "User";  
+        public string Role { get; set; } = "User";
     }
 }
