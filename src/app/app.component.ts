@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'tasinmazFrontend';
+
+  export(type: 'excel' | 'pdf') {
+    // Burada gerçek export işlemi yapılacak
+    console.log(`${type.toUpperCase()} aktarımı başlatıldı.`);
+  }
 }

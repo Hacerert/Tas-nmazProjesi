@@ -1,0 +1,124 @@
+<!-- src/app/components/tasinmaz-add/tasinmaz-add.component.html -->
+<div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Yeni Taşınmaz Ekle</h2>
+    <form [formGroup]="tasinmazForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <!-- İl -->
+        <div>
+          <label for="il" class="block text-gray-700 text-sm font-bold mb-2">İl:</label>
+          <input type="text" id="il" formControlName="il"
+                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 [ngClass]="{'border-red-500': tasinmazForm.get('il')?.invalid && tasinmazForm.get('il')?.touched}">
+          <div *ngIf="tasinmazForm.get('il')?.invalid && tasinmazForm.get('il')?.touched" class="text-red-500 text-xs mt-1">
+            İl zorunludur.
+          </div>
+        </div>
+
+        <!-- İlçe -->
+        <div>
+          <label for="ilce" class="block text-gray-700 text-sm font-bold mb-2">İlçe:</label>
+          <input type="text" id="ilce" formControlName="ilce"
+                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 [ngClass]="{'border-red-500': tasinmazForm.get('ilce')?.invalid && tasinmazForm.get('ilce')?.touched}">
+          <div *ngIf="tasinmazForm.get('ilce')?.invalid && tasinmazForm.get('ilce')?.touched" class="text-red-500 text-xs mt-1">
+            İlçe zorunludur.
+          </div>
+        </div>
+
+        <!-- Mahalle -->
+        <div>
+          <label for="mahalle" class="block text-gray-700 text-sm font-bold mb-2">Mahalle:</label>
+          <input type="text" id="mahalle" formControlName="mahalle"
+                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 [ngClass]="{'border-red-500': tasinmazForm.get('mahalle')?.invalid && tasinmazForm.get('mahalle')?.touched}">
+          <div *ngIf="tasinmazForm.get('mahalle')?.invalid && tasinmazForm.get('mahalle')?.touched" class="text-red-500 text-xs mt-1">
+            Mahalle zorunludur.
+          </div>
+        </div>
+
+        <!-- Ada -->
+        <div>
+          <label for="ada" class="block text-gray-700 text-sm font-bold mb-2">Ada:</label>
+          <input type="text" id="ada" formControlName="ada"
+                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 [ngClass]="{'border-red-500': tasinmazForm.get('ada')?.invalid && tasinmazForm.get('ada')?.touched}">
+          <div *ngIf="tasinmazForm.get('ada')?.invalid && tasinmazForm.get('ada')?.touched" class="text-red-500 text-xs mt-1">
+            Ada zorunludur.
+          </div>
+        </div>
+
+        <!-- Parsel -->
+        <div>
+          <label for="parsel" class="block text-gray-700 text-sm font-bold mb-2">Parsel:</label>
+          <input type="text" id="parsel" formControlName="parsel"
+                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 [ngClass]="{'border-red-500': tasinmazForm.get('parsel')?.invalid && tasinmazForm.get('parsel')?.touched}">
+          <div *ngIf="tasinmazForm.get('parsel')?.invalid && tasinmazForm.get('parsel')?.touched" class="text-red-500 text-xs mt-1">
+            Parsel zorunludur.
+          </div>
+        </div>
+
+        <!-- Adres -->
+        <div class="md:col-span-2">
+          <label for="adres" class="block text-gray-700 text-sm font-bold mb-2">Adres:</label>
+          <textarea id="adres" formControlName="adres" rows="3"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none"
+                    [ngClass]="{'border-red-500': tasinmazForm.get('adres')?.invalid && tasinmazForm.get('adres')?.touched}"></textarea>
+          <div *ngIf="tasinmazForm.get('adres')?.invalid && tasinmazForm.get('adres')?.touched" class="text-red-500 text-xs mt-1">
+            Adres zorunludur.
+          </div>
+        </div>
+
+        <!-- Koordinat -->
+        <div class="md:col-span-2">
+          <label for="koordinat" class="block text-gray-700 text-sm font-bold mb-2">Koordinat:</label>
+          <input type="text" id="koordinat" formControlName="koordinat"
+                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 [ngClass]="{'border-red-500': tasinmazForm.get('koordinat')?.invalid && tasinmazForm.get('koordinat')?.touched}">
+          <div *ngIf="tasinmazForm.get('koordinat')?.invalid && tasinmazForm.get('koordinat')?.touched" class="text-red-500 text-xs mt-1">
+            Koordinat zorunludur.
+          </div>
+        </div>
+
+        <!-- Taşınmaz Tipi -->
+        <div class="md:col-span-2">
+          <label for="tasinmazTipi" class="block text-gray-700 text-sm font-bold mb-2">Taşınmaz Tipi:</label>
+          <select id="tasinmazTipi" formControlName="tasinmazTipi"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  [ngClass]="{'border-red-500': tasinmazForm.get('tasinmazTipi')?.invalid && tasinmazForm.get('tasinmazTipi')?.touched}">
+            <option value="">Seçiniz...</option>
+            <option value="Arsa">Arsa</option>
+            <option value="Bina">Bina</option>
+            <option value="Daire">Daire</option>
+            <option value="Tarla">Tarla</option>
+            <option value="Dükkan">Dükkan</option>
+            <!-- Diğer tipler eklenebilir -->
+          </select>
+          <div *ngIf="tasinmazForm.get('tasinmazTipi')?.invalid && tasinmazForm.get('tasinmazTipi')?.touched" class="text-red-500 text-xs mt-1">
+            Taşınmaz tipi zorunludur.
+          </div>
+        </div>
+      </div>
+
+      <!-- Mesaj Alanı -->
+      <div *ngIf="message" [ngClass]="{'bg-green-100 border-green-400 text-green-700': isSuccess, 'bg-red-100 border-red-400 text-red-700': !isSuccess}" class="border px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{{ message }}</span>
+      </div>
+
+      <!-- Butonlar -->
+      <div class="flex items-center justify-between">
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                [disabled]="tasinmazForm.invalid">
+          Taşınmaz Ekle
+        </button>
+      </div>
+      <div class="mt-4 text-center">
+        <a routerLink="/tasinmazlar" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+          Taşınmaz Listesine Geri Dön
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
