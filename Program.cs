@@ -86,3 +86,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+//me
+    //Controller fronttan gelen apıleri get set yapar
+    //data veritabanı ile iletişim sağlar
+    //dtos backend ile frontend arasında veri taşır
+    //entitiy tabloları oluşturur
+    //migrations mesela yeni bir değişiklik yaptık buraya kaydolur
+    //services controlerin kullandığı işlevler burada tanımlanıyo
+    //interface servislerin arayüzlerini tanımlıyo
+

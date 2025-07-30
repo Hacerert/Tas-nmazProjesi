@@ -74,27 +74,27 @@ namespace tasinmazBackend.Services
         //    return verified ? user : null;
         //}
 
-        public string ComputeSha256Hash(string rawData)
+        public string ComputeSha256Hash(string rawData) //düz metni hashler string yapar
         {
-            using (SHA256 sha256Hash = SHA256.Create())
+            using (SHA256 sha256Hash = SHA256.Create()) //hash işlemini yapar
             {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); //burda şunu yapıyo
-                StringBuilder builder = new StringBuilder();
-                foreach (byte b in bytes)
-                    builder.Append(b.ToString("x2"));
-                return builder.ToString();
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); //rawData byte çevrilip -sha256 hash hesaplaması yapılır
+                StringBuilder builder = new StringBuilder(); //hash okunmak için nesne oluşturuyor
+                foreach (byte b in bytes) 
+                    builder.Append(b.ToString("x2")); //her byte *2 ile builder içine ekleniyor
+                return builder.ToString(); //hash stringe döndürülüyor mesela 12345=59944abb...
             }
         }
 
-        public User? ValidateUser(string userName, string password)
+        public User? ValidateUser(string userName, string password) //login olmak için kullanıcı adı ve şifre kontrol eder.
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == userName); // username e göre user alma
-            if (user == null)
+            var user = _context.Users.FirstOrDefault(u => u.UserName == userName); //user tablosundan usurname eşleşen ilk kullanıcıyı alır
+            if (user == null) //kullanıcı yoksa null oluyor
                 return null;
 
-            string hashedInputPassword = ComputeSha256Hash(password);
+            string hashedInputPassword = ComputeSha256Hash(password); //bu hash ile veritabanındaki hash karşılaştırıyor
 
-            return hashedInputPassword == user.Password ? user : null;
+            return hashedInputPassword == user.Password ? user : null; //aynıysa giriş başarılı değilse null
         }
 
     }
