@@ -1,0 +1,159 @@
+<div class="tasinmaz-edit-bg">
+  <div class="tasinmaz-edit-box">
+    <h2 class="tasinmaz-edit-title">Taşınmazı Düzenle</h2>
+    <form [formGroup]="tasinmazForm" (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">İl</label>
+        <input class="w-full border rounded px-3 py-2" formControlName="il" placeholder="İl" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">İlçe</label>
+        <input class="w-full border rounded px-3 py-2" formControlName="ilce" placeholder="İlçe" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Mahalle</label>
+        <input class="w-full border rounded px-3 py-2" formControlName="mahalle" placeholder="Mahalle" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Ada</label>
+        <input class="w-full border rounded px-3 py-2" formControlName="ada" placeholder="Ada" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Parsel</label>
+        <input class="w-full border rounded px-3 py-2" formControlName="parsel" placeholder="Parsel" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Nitelik</label>
+        <input class="w-full border rounded px-3 py-2" formControlName="nitelik" placeholder="Nitelik" />
+      </div>
+      <div style="background:none; box-shadow:none; padding:0;">
+        <button type="submit" class="tasinmaz-action-btn add">Kaydet</button>
+        <button type="button" class="tasinmaz-action-btn logout" (click)="cancel()">İptal</button>
+      </div>
+      <div *ngIf="message" class="mt-4 text-center" [ngClass]="isSuccess ? 'text-green-600' : 'text-red-600'">
+        {{ message }}
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+/* Sayfa ortalama ve arka plan */
+.tasinmaz-edit-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f8fb;
+}
+
+/* Kutu */
+.tasinmaz-edit-box {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(44,62,80,0.13);
+  padding: 36px 32px 28px 32px;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Başlık */
+.tasinmaz-edit-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Form elemanları */
+label {
+  color: #232526;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 0.98rem;
+  display: block;
+}
+
+input {
+  width: 100%;
+  background: #fafafa;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  color: #232526;
+  font-weight: 500;
+  margin-top: 2px;
+  margin-bottom: 12px;
+  transition: border 0.2s;
+}
+
+input:focus {
+  border-color: #1976d2;
+  outline: none;
+}
+
+button,
+.tasinmaz-action-btn {
+  font-size: 1.08rem;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  padding: 12px 28px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: none;
+}
+
+/* Her buton için düz renk */
+.tasinmaz-action-btn.logout,
+button.logout {
+  background: #e53935;
+  color: #fff;
+}
+
+.tasinmaz-action-btn.add,
+button.add {
+  background: #1976d2;
+  color: #fff;
+}
+
+.tasinmaz-action-btn.export,
+button.export {
+  background: #43a047;
+  color: #fff;
+}
+
+.tasinmaz-action-btn.pdf,
+button.pdf {
+  background: #fb8c00;
+  color: #fff;
+}
+
+/* Hover'da hiçbir şey olmasın */
+.tasinmaz-action-btn:hover,
+button:hover {
+  background: inherit;
+  color: inherit;
+  box-shadow: none;
+  filter: none;
+  transition: none;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-green-600 {
+  color: #197d2d;
+}
+
+.text-red-600 {
+  color: #d7263d;
+}
+</style>

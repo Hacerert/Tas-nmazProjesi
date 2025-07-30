@@ -1,50 +1,58 @@
-/* Tablo genel stil */
+/* Modern tablo stili */
 .tasinmaz-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  background: #f8fafc;
-  box-shadow: 0 2px 12px rgba(44,62,80,0.08);
-  border-radius: 10px;
+  background: #97202000;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.10);
+  border-radius: 12px;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 2px solid #1976d2;
 }
 
-/* Başlık satırı */
+/* Tablo başlığı daha canlı ve kontrastlı */
 .tasinmaz-table thead {
-  background: linear-gradient(90deg, #232526 0%, #414345 100%);
+  background: #1976d2;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
 }
 
 .tasinmaz-table th {
-  color: #fff;
-  font-weight: 700;
-  padding: 16px 18px;
+  color: #a31616;
+  font-weight: 800;
+  padding: 20px 22px;
   text-align: left;
-  letter-spacing: 1px;
-  border-bottom: 2px solid #1976d2;
+  letter-spacing: 1.2px;
+  border-bottom: 3px solid #1565c0;
+  font-size: 1.15rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  border: 2px solid #1976d2;
 }
 
 /* Satırlar */
 .tasinmaz-table tbody tr {
-  background: #fff;
+  background: #f4f8fb;
   transition: background 0.2s;
 }
 
 .tasinmaz-table tbody tr:nth-child(even) {
-  background: #f1f5fb;
+  background: #e3eefd;
 }
 
 .tasinmaz-table tbody tr:hover {
-  background: #e3eefd;
+  background: #bbdefb;
 }
 
 /* Hücreler */
 .tasinmaz-table td {
-  color: #232526;
-  padding: 14px 18px;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 1rem;
+  color: #1a237e;
+  padding: 16px 20px;
+  border-bottom: 1.5px solid #e0e0e0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border: 2px solid #1976d2;
 }
 
 /* Responsive */
@@ -55,48 +63,49 @@
   }
 }
 
-/* Modern ve okunaklı butonlar */
+/* Butonları kutu içinde ve arka planı belirgin yap */
+.tasinmaz-action-bar {
+  background: #e3eefd;
+  padding: 18px 20px 14px 20px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Butonlar daha belirgin ve okunaklı */
 .tasinmaz-action-btn {
-  display: inline-block;
-  padding: 10px 22px;
-  margin-right: 10px;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.08rem;
+  font-weight: 700;
+  border-radius: 6px;
   border: none;
-  border-radius: 8px;
+  padding: 12px 28px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, transform 0.15s;
-  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+  box-shadow: none;
+  background: #1976d2; /* varsayılan mavi */
+  color: #fff;
+}
+
+/* Her buton için düz renk */
+.tasinmaz-action-btn.logout {
+  background: #e53935;
+  color: #fff;
+}
+.tasinmaz-action-btn.add {
+  background: #1976d2;
+  color: #fff;
+}
+
+/* Hover'da hiçbir şey olmasın */
+.tasinmaz-action-btn:hover,
+.tasinmaz-action-btn:active,
+.tasinmaz-action-btn:focus {
+  background: inherit;
+  color: inherit;
+  box-shadow: none;
+  filter: none;
   outline: none;
 }
-
-.tasinmaz-action-btn.add {
-  background: linear-gradient(90deg, #1976d2 0%, #21cbf3 100%);
-  color: #fff;
-}
-
-.tasinmaz-action-btn.add:hover {
-  background: linear-gradient(90deg, #1565c0 0%, #00bcd4 100%);
-  transform: scale(1.04);
-}
-
-.tasinmaz-action-btn.export {
-  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
-  color: #232526;
-}
-
-.tasinmaz-action-btn.export:hover {
-  background: linear-gradient(90deg, #11998e 0%, #38f9d7 100%);
-  color: #fff;
-  transform: scale(1.04);
-}
-
-.tasinmaz-action-btn.logout {
-  background: linear-gradient(90deg, #ff5858 0%, #f09819 100%);
-  color: #fff;
-}
-
-.tasinmaz-action-btn.logout:hover {
-  background: linear-gradient(90deg, #d7263d 0%, #fbb034 100%);
-  transform: scale(1.04);
-}
+/*taşınmaz list sayfasınn tüm düzenlerini içerio

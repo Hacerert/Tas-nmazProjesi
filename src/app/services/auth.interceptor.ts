@@ -26,3 +26,4 @@ export class AuthInterceptor implements HttpInterceptor {
     }
   }
 }
+//backend ile iletişimi sağlıyor 

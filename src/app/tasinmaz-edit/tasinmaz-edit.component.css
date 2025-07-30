@@ -1,0 +1,35 @@
+.tasinmaz-action-btn {
+  font-size: 1.08rem;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  padding: 12px 0;
+  cursor: pointer;
+  box-shadow: none;
+  background: #1976d2;
+  color: #fff;
+  width: 120px; /* Butonları genişlet */
+  margin-right: 12px;
+  display: inline-block;
+}
+
+/* Farklı butonlar için düz renk */
+.tasinmaz-action-btn.logout {
+  background: #e53935;
+}
+
+.tasinmaz-action-btn.add {
+  background: #1976d2;
+}
+
+/* Hover'da hiçbir şey olmasın */
+.tasinmaz-action-btn:hover,
+.tasinmaz-action-btn:active,
+.tasinmaz-action-btn:focus {
+  background: inherit;
+  color: inherit;
+  box-shadow: none;
+  filter: none;
+  outline: none;
+}
+/*taşınmaz düzenleme sayfası ekledik ya onun içinde değişiklik yapmak için kullanılıyo

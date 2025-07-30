@@ -26,3 +26,4 @@ export class AuthGuard implements CanActivate {
     }
   }
 }
+//oturum açılırsa taşınmaza götürür oturum açılmazsa login ekranında kalır
