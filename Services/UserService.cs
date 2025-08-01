@@ -1,101 +1,117 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Text;
+﻿// tasinmazBackend/Services/UserService.cs
+using Microsoft.EntityFrameworkCore;
 using tasinmazBackend.Data;
-using tasinmazBackend.Dtos;
 using tasinmazBackend.Entitiy;
 using tasinmazBackend.Services.Interfaces;
-using System.Security.Cryptography;
-
+using tasinmazBackend.Dtos; // DTO'lar için
+using BCrypt.Net; // BCrypt için
 
 namespace tasinmazBackend.Services
 {
     public class UserService : IUserService
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<UserService> _logger;
 
-        public UserService(AppDbContext context, ILogger<UserService> logger)
+        public UserService(AppDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
-        public void RegisterUser(RegisterUserDto dto)
+        public User? ValidateUser(string username, string password)
         {
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
-            User user = new User
-            {
-                UserName = dto.Username,
-                Email = dto.Email,
-                Password = hashedPassword,
-                Role = "User"
-            };
-
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            _logger.LogInformation("Yeni kullanıcı eklendi: " + dto.Username);
-        }
-
-        public bool Login(string username, string password)
-        {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username);
+            // Kullanıcı adı veya e-posta ile giriş yapmayı desteklemek için
+            var user = _context.Users.SingleOrDefault(u => u.UserName == username || u.Email == username);
 
             if (user == null)
             {
-                _logger.LogWarning("Giriş başarısız: kullanıcı bulunamadı -> " + username);
-                return false;
+                return null; // Kullanıcı bulunamadı
             }
 
-            bool result = BCrypt.Net.BCrypt.Verify(password, user.Password);
-
-            if (!result)
+            // BCrypt ile şifre doğrulaması
+            // user.Password (entity'deki alan) ile gelen şifreyi karşılaştır
+            if (BCrypt.Net.BCrypt.Verify(password, user.Password)) // <-- BURASI DÜZELTİLDİ!
             {
-                _logger.LogWarning("Giriş başarısız: şifre hatalı -> " + username);
-            }
-            else
-            {
-                _logger.LogInformation("Giriş başarılı: " + username);
+                return user; // Şifre doğru
             }
 
-            return result;
+            return null; // Şifre yanlış
         }
 
-        // İşte JWT login için yeni metod:
-        //public User? ValidateUser(string userName, string password)
-        //{
-        //    var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
-        //    if (user == null)
-        //        return null;
-
-        //    bool verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
-        //    return verified ? user : null;
-        //}
-
-        public string ComputeSha256Hash(string rawData) //düz metni hashler string yapar
+        public async Task<User> RegisterUser(RegisterUserDto registerDto)
         {
-            using (SHA256 sha256Hash = SHA256.Create()) //hash işlemini yapar
+            // Kullanıcı adı veya e-posta zaten kullanımda mı kontrol et
+            if (await _context.Users.AnyAsync(u => u.UserName == registerDto.Username))
             {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); //rawData byte çevrilip -sha256 hash hesaplaması yapılır
-                StringBuilder builder = new StringBuilder(); //hash okunmak için nesne oluşturuyor
-                foreach (byte b in bytes) 
-                    builder.Append(b.ToString("x2")); //her byte *2 ile builder içine ekleniyor
-                return builder.ToString(); //hash stringe döndürülüyor mesela 12345=59944abb...
+                throw new InvalidOperationException("Bu kullanıcı adı zaten kullanımda.");
             }
+            if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
+            {
+                throw new InvalidOperationException("Bu e-posta adresi zaten kullanımda.");
+            }
+
+            // Şifreyi hash'le
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
+
+            var user = new User
+            {
+                UserName = registerDto.Username,
+                Email = registerDto.Email,
+                Password = passwordHash, // <-- BURASI DÜZELTİLDİ! PasswordHash yerine Password kullanıldı
+                Role = registerDto.Role // Rolü DTO'dan al
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
 
-        public User? ValidateUser(string userName, string password) //login olmak için kullanıcı adı ve şifre kontrol eder.
+        // YENİ EKLENEN METOTLARIN UYGULAMASI
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == userName); //user tablosundan usurname eşleşen ilk kullanıcıyı alır
-            if (user == null) //kullanıcı yoksa null oluyor
-                return null;
-
-            string hashedInputPassword = ComputeSha256Hash(password); //bu hash ile veritabanındaki hash karşılaştırıyor
-
-            return hashedInputPassword == user.Password ? user : null; //aynıysa giriş başarılı değilse null
+            return await _context.Users.ToListAsync();
         }
 
+        public async Task<User?> GetUserById(int id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
+
+        public async Task UpdateUser(UserUpdateDto userUpdateDto)
+        {
+            var user = await _context.Users.FindAsync(userUpdateDto.Id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"ID'si {userUpdateDto.Id} olan kullanıcı bulunamadı.");
+            }
+
+            // Kullanıcı adı veya e-posta değişikliği varsa, benzersizlik kontrolü yap
+            if (user.UserName != userUpdateDto.Username && await _context.Users.AnyAsync(u => u.UserName == userUpdateDto.Username))
+            {
+                throw new InvalidOperationException("Bu kullanıcı adı zaten kullanımda.");
+            }
+            if (user.Email != userUpdateDto.Email && await _context.Users.AnyAsync(u => u.Email == userUpdateDto.Email))
+            {
+                throw new InvalidOperationException("Bu e-posta adresi zaten kullanımda.");
+            }
+
+            user.UserName = userUpdateDto.Username;
+            user.Email = userUpdateDto.Email;
+            user.Role = userUpdateDto.Role;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"ID'si {id} olan kullanıcı bulunamadı.");
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

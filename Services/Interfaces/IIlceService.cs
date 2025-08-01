@@ -6,5 +6,7 @@ namespace tasinmazBackend.Services.Interfaces
     {
         Task<List<IlceDto>> GetAllAsync();
         Task<IlceDto> CreateAsync(IlceDto dto);
+
+        Task<List<IlceDto>> GetAsync(int idId);
     }
 }

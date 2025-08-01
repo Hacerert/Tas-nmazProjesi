@@ -46,5 +46,22 @@ namespace tasinmazBackend.Services
             dto.Id = ilce.Id;
             return dto;
         }
+
+        public async Task<List<IlceDto>> GetAsync(int ilId)
+        {
+            return await _context.Ilceler
+                .Include(i => i.Il)
+                .Select(i => new IlceDto
+                {
+                    Id = i.Id,
+                    Ad = i.Ad,
+                    IlId = i.IlId,
+                    Il = i.Il == null ? null : new IlDto
+                    {
+                        Id = i.Il.Id,
+                        Ad = i.Il.Ad
+                    }
+                }).Where(i => i.IlId == ilId).ToListAsync();
+        }
     }
 }
