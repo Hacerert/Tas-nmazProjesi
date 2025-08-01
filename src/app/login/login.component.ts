@@ -17,7 +17,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     // Eğer kullanıcı zaten giriş yapmış ve token'ı geçerliyse, taşınmazlar sayfasına yönlendir
-    if (this.authService.isAuthenticated()) {
+    // isAuthenticated() yerine isLoggedIn() kullanıldı
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['/tasinmazlar']);
     }
   }

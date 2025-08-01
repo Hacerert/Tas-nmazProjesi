@@ -1,0 +1,80 @@
+<!-- src/app/user-management/user-management.component.html -->
+<div class="container mx-auto p-6 bg-gray-50 min-h-screen rounded-xl shadow-2xl">
+  <div class="flex justify-between items-center mb-8 border-b-2 border-gray-200 pb-4">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Kullanıcı Yönetimi</h1>
+    <div class="flex space-x-4">
+      <!-- Yeni Kullanıcı Ekle Butonu -->
+      <!-- addNewUser metodu çağrılıyor -->
+      <button
+        (click)="addNewUser()"
+        class="px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-300 ease-in-out transform hover:scale-105"
+      >
+        Yeni Kullanıcı Ekle
+      </button>
+      <!-- Çıkış Yap Butonu -->
+      <button
+        (click)="logout()"
+        style="background-color: #dc2626; color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease, transform 0.3s ease;"
+        onmouseover="this.style.backgroundColor='#b91c1c'; this.style.transform='scale(1.05)';"
+        onmouseout="this.style.backgroundColor='#dc2626'; this.style.transform='scale(1)';"
+      >
+        Çıkış Yap
+      </button>
+    </div>
+  </div>
+
+  <!-- Hata Mesajı -->
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg relative mb-6 shadow-md" role="alert">
+    <strong class="font-bold text-lg">Hata!</strong>
+    <span class="block sm:inline ml-3 text-base">{{ error }}</span>
+  </div>
+
+  <!-- Yükleniyor Mesajı -->
+  <div *ngIf="loading" class="text-center py-12 text-gray-600 text-xl font-medium">
+    Kullanıcılar yükleniyor... Lütfen bekleyin.
+  </div>
+
+  <!-- Kullanıcılar Tablosu -->
+  <div *ngIf="!loading && users.length > 0" class="overflow-x-auto bg-white rounded-xl shadow-lg p-6">
+    <table class="min-w-full leading-normal table-auto">
+      <thead>
+        <tr class="bg-gray-100 text-gray-700 uppercase text-sm font-semibold border-b-2 border-gray-300">
+          <th class="px-6 py-4 text-left tracking-wider">ID</th>
+          <th class="px-6 py-4 text-left tracking-wider">Kullanıcı Adı</th>
+          <th class="px-6 py-4 text-left tracking-wider">Rol</th>
+          <th class="px-6 py-4 text-center tracking-wider">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users" class="border-b border-gray-100 hover:bg-gray-50 transition duration-150 ease-in-out">
+          <td class="px-6 py-4 text-base text-gray-800 whitespace-nowrap">{{ user.id }}</td>
+          <td class="px-6 py-4 text-base text-gray-800 whitespace-nowrap">{{ user.username }}</td>
+          <td class="px-6 py-4 text-base text-gray-800 whitespace-nowrap">{{ user.role }}</td>
+          <td class="px-6 py-4 text-base text-gray-800 text-center">
+            <div class="flex items-center justify-center space-x-4">
+              <!-- Düzenle Butonu -->
+              <!-- editUser metodu çağrılıyor -->
+              <button (click)="editUser(user.id)"
+                      class="text-blue-600 hover:text-blue-800 transition duration-150 transform hover:scale-110 focus:outline-none"
+                      title="Kullanıcıyı Düzenle">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              </button>
+              <!-- Sil Butonu -->
+              <button (click)="deleteUser(user.id)"
+                      class="text-red-600 hover:text-red-800 transition duration-150 transform hover:scale-110 focus:outline-none"
+                      title="Kullanıcıyı Sil">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Kullanıcı Yok Mesajı -->
+  <div *ngIf="!loading && users.length === 0 && !error" class="text-center py-12 text-gray-600 bg-white rounded-xl shadow-lg">
+    <p class="text-xl font-semibold mb-4">Henüz hiç kullanıcı bulunmamaktadır.</p>
+    <p class="text-base">Yeni kullanıcılar kayıt olduğunda burada görüneceklerdir.</p>
+  </div>
+</div>

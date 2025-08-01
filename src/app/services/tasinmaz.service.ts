@@ -7,17 +7,26 @@ import { AuthService } from './auth.service'; // AuthService'i import et
 // Tasinmaz interface'ini burada tanımlıyoruz
 export interface Tasinmaz {
   id?: number; // Backend'de otomatik oluştuğu için opsiyonel
-  il: string;
-  ilce: string;
-  mahalle: string;
   ada: string;
   parsel: string;
   adres: string;
   koordinat: string;
-  tasinmazTipi: string; // Yeni eklenen alan
+  tasinmazTipi: string;
   userId: number;
+  // İl, İlçe ve Mahalle artık doğrudan string değil, iç içe objeler
+  mahalle: { // Mahalle bir obje
+    id: number;
+    ad: string; // Mahalle adı burada
+    ilce: { // İlçe bir obje
+      id: number;
+      ad: string; // İlçe adı burada
+      il: { // İl bir obje
+        id: number;
+        ad: string; // İl adı burada
+      };
+    };
+  };
 }
-
 @Injectable({
   providedIn: 'root'
 })

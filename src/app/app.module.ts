@@ -4,18 +4,27 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms'; // [formGroup] için gerekli
 import { FormsModule } from '@angular/forms'; // [(ngModel)] ve #ngForm için gerekli
-import { CommonModule } from '@angular/common'; // *ngIf, [ngClass] gibi direktifler için gerekli
-import { RouterModule } from '@angular/router'; // router-outlet ve [routerLink] için gerekli
 
 import { AppRoutingModule } from './app-routing.module'; // Kendi routing modülümüz
 import { AppComponent } from './app.component';
 
 // Bileşenlerin yolları, Get-ChildItem çıktısına göre KESİNLEŞTİRİLDİ:
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './components/register/register.component'; // YOL KESİNLEŞTİRİLDİ
-import { TasinmazListComponent } from './tasinmaz-list/tasinmaz-list.component';
-import { TasinmazAddComponent } from './components/tasinmaz-add/tasinmaz-add.component'; // YOL KESİNLEŞTİRİLDİ
-import { TasinmazEditComponent } from './tasinmaz-edit/tasinmaz-edit.component';
+// (Ekran görüntülerinizdeki dosya yapınıza göre bu yolların doğru olduğunu varsayıyorum)
+import { LoginComponent } from './login/login.component'; // components klasörü altında
+import { RegisterComponent } from './components/register/register.component'; // components klasörü altında
+import { TasinmazListComponent } from './tasinmaz-list/tasinmaz-list.component'; // components klasörü altında
+import { TasinmazAddComponent } from './components/tasinmaz-add/tasinmaz-add.component'; // components klasörü altında
+import { TasinmazEditComponent } from './tasinmaz-edit/tasinmaz-edit.component'; // components klasörü altında
+import { UserManagementComponent } from './user-management/user-management.component'; // app klasörü altında
+
+import { JwtModule } from '@auth0/angular-jwt';
+import { UserEditComponent } from './components/user-edit/user-edit.component'; // <-- BU SATIR DOĞRU
+import { UserAddComponent } from './components/user-add/user-add.component'; // Yeni eklenen UserAddComponent
+
+// JWT token'ının nerede saklandığını belirtiyoruz.
+export function tokenGetter() {
+  return localStorage.getItem('jwt_token');
+}
 
 @NgModule({
   declarations: [
@@ -24,7 +33,10 @@ import { TasinmazEditComponent } from './tasinmaz-edit/tasinmaz-edit.component';
     RegisterComponent,
     TasinmazListComponent,
     TasinmazAddComponent,
-    TasinmazEditComponent
+    TasinmazEditComponent,
+    UserManagementComponent,
+    UserEditComponent,
+    UserAddComponent
   ],
   imports: [
     BrowserModule,
@@ -32,8 +44,16 @@ import { TasinmazEditComponent } from './tasinmaz-edit/tasinmaz-edit.component';
     HttpClientModule,
     ReactiveFormsModule, // Formlar için
     FormsModule,         // Template-driven formlar için (login gibi)
-    CommonModule,        // *ngIf, [ngClass] gibi temel direktifler için
-    RouterModule         // router-outlet ve [routerLink] için (AppRoutingModule içinde de var ama burada da olması önemli)
+    // CommonModule ve RouterModule genellikle AppRoutingModule veya BrowserModule tarafından sağlanır.
+    // Eğer hata almazsanız bu şekilde bırakabilirsiniz.
+    
+    JwtModule.forRoot({ // <-- BU KISIM ÇOK ÖNEMLİ! Buraya eklenmeliydi!
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ['localhost:5000'], // Backend domain'inizi buraya ekleyin
+        disallowedRoutes: []
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

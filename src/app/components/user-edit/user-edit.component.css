@@ -1,0 +1,48 @@
+/* src/app/components/user-edit/user-edit.component.css */
+
+/* Genel kapsayıcı için maksimum genişlik ve ortalama */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Form elemanları için genel stiller */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  border: 1px solid #d1d5db; /* Tailwind'in border-gray-300'üne benzer */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Tailwind'in shadow-sm'ine benzer */
+}
+
+input:focus,
+select:focus {
+  border-color: transparent; /* Odaklandığında varsayılan border'ı kaldır */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* focus:ring-2 focus:ring-blue-500'e benzer */
+}
+
+/* Hata durumundaki border rengi */
+input.border-red-500,
+select.border-red-500 {
+  border-color: #ef4444; /* Tailwind'in text-red-500'üne benzer */
+}
+
+/* Buton stilleri */
+button {
+  cursor: pointer;
+  outline: none;
+}
+
+/* Gölge ve yuvarlak köşeler */
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+/* Hata mesajı gölgesi */
+.bg-red-100.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}

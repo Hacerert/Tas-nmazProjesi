@@ -28,17 +28,28 @@ export class TasinmazListComponent implements OnInit, OnDestroy {
     this.userIdSubscription = this.authService.userId$.subscribe(userId => {
       console.log('TasinmazListComponent (ngOnInit): userId$ güncellendi:', userId);
       if (userId !== null) {
-        this.loadTasinmazlar(userId);
+        // userId string geldiği için number'a çeviriyoruz
+        const numericUserId = parseInt(userId, 10);
+        if (!isNaN(numericUserId)) {
+          this.loadTasinmazlar(numericUserId);
+        } else {
+          console.error('TasinmazListComponent: Geçersiz Kullanıcı ID formatı:', userId);
+          this.error = 'Kullanıcı ID\'si geçersiz formatta.';
+          this.loading = false;
+          this.tasinmazlar = [];
+        }
       } else {
-        if (this.authService.isAuthenticated()) {
-          console.error('TasinmazListComponent: isAuthenticated true olmasına rağmen userId null.');
+        // isAuthenticated() yerine isLoggedIn() kullanıldı
+        if (this.authService.isLoggedIn()) {
+          console.error('TasinmazListComponent: isLoggedIn true olmasına rağmen userId null.');
+          this.error = 'Kullanıcı oturumu aktif ancak ID alınamadı.';
         } else {
           console.log('TasinmazListComponent: Kullanıcı ID null ve kimlik doğrulaması yapılmamış, login sayfasına yönlendiriliyor.');
           this.router.navigate(['/login']);
         }
         this.loading = false;
         this.tasinmazlar = [];
-        this.error = 'Kullanıcı oturumu bulunamadı veya geçersiz.';
+        this.error = this.error || 'Kullanıcı oturumu bulunamadı veya geçersiz.';
       }
     });
   }
@@ -113,15 +124,20 @@ export class TasinmazListComponent implements OnInit, OnDestroy {
    * Seçilen tüm taşınmazları siler.
    */
   deleteSelectedTasinmazlar(): void {
-    const currentUserId = this.authService.getUserId();
-    if (currentUserId === null) {
+    const currentUserIdString = this.authService.getUserId();
+    if (currentUserIdString === null) {
       this.error = 'Kullanıcı ID\'si bulunamadı. Lütfen tekrar giriş yapın.';
       this.router.navigate(['/login']);
       return;
     }
+    const currentUserId = parseInt(currentUserIdString, 10);
+    if (isNaN(currentUserId)) {
+      this.error = 'Kullanıcı ID\'si geçersiz formatta.';
+      return;
+    }
 
     if (this.selectedTasinmazIds.length === 0) {
-      this.error = 'Lütfen silmek için en az bir taşınmaz seçin.';
+      alert('Lütfen silmek için en az bir taşınmaz seçin.');
       return;
     }
 
@@ -169,11 +185,35 @@ export class TasinmazListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/tasinmaz-ekle']);
   }
 
+  // BURASI EKSİKTİ VEYA YANLIŞTI, ŞİMDİ DOĞRU ŞEKİLDE EKLENDİ!
+  deleteTasinmaz(id: number): void {
+    if (confirm('Bu taşınmazı silmek istediğinizden emin misiniz?')) {
+      this.tasinmazService.deleteTasinmaz(id).subscribe({
+        next: () => {
+          alert('Taşınmaz başarıyla silindi.');
+          // currentUserId'yi kullanarak listeyi yeniden yükle
+          const currentUserIdString = this.authService.getUserId();
+          if (currentUserIdString) {
+            const numericUserId = parseInt(currentUserIdString, 10);
+            if (!isNaN(numericUserId)) {
+              this.loadTasinmazlar(numericUserId);
+            }
+          }
+        },
+        error: (err) => {
+          console.error('Taşınmaz silinirken hata oluştu', err);
+          alert('Taşınmaz silinirken bir hata oluştu: ' + (err.error?.message || err.message));
+        }
+      });
+    }
+  }
+
   /**
    * "Çıkış Yap" butonu için metod.
    * AuthService üzerindeki logout metodunu çağırır.
    */
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

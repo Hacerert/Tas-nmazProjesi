@@ -1,101 +1,122 @@
-/* Modern tablo stili */
+/* Sade tablo stili */
 .tasinmaz-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: #97202000;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
   box-shadow: 0 2px 12px rgba(44,62,80,0.10);
-  border-radius: 12px;
-  overflow: hidden;
   margin-bottom: 32px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border: 2px solid #1976d2;
+  border: 2px solid #bdbdbd;
+  overflow: hidden;
 }
 
-/* Tablo başlığı daha canlı ve kontrastlı */
-.tasinmaz-table thead {
-  background: #1976d2;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+.tasinmaz-table th,
+.tasinmaz-table td {
+  border: 1px solid #bdbdbd;
+  padding: 14px 18px;
+  font-size: 1.08rem;
+  text-align: left;
 }
 
 .tasinmaz-table th {
-  color: #a31616;
+  background: #f0f2f5;
+  color: #232526;
   font-weight: 800;
-  padding: 20px 22px;
-  text-align: left;
-  letter-spacing: 1.2px;
-  border-bottom: 3px solid #1565c0;
-  font-size: 1.15rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.13);
-  border: 2px solid #1976d2;
+  letter-spacing: 0.5px;
 }
 
-/* Satırlar */
-.tasinmaz-table tbody tr {
-  background: #f4f8fb;
-  transition: background 0.2s;
+.tasinmaz-table td {
+  background: #fff;
+  color: #232526;
+  font-weight: 500;
 }
 
-.tasinmaz-table tbody tr:nth-child(even) {
+.tasinmaz-table tbody tr:nth-child(even) td {
+  background: #f7faff;
+}
+
+.tasinmaz-table tbody tr:hover td {
   background: #e3eefd;
 }
 
-.tasinmaz-table tbody tr:hover {
-  background: #bbdefb;
+/* Checkbox hizalama */
+.tasinmaz-table input[type="checkbox"] {
+  transform: scale(1.1);
+  margin-right: 4px;
 }
 
-/* Hücreler */
-.tasinmaz-table td {
-  color: #1a237e;
-  padding: 16px 20px;
-  border-bottom: 1.5px solid #e0e0e0;
-  font-size: 1.08rem;
-  font-weight: 600;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  border: 2px solid #1976d2;
+/* Tablo başlıklarını daha koyu ve net yap */
+.tasinmaz-table th {
+  font-size: 1.12rem;
+  font-weight: 800;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Tabloyu responsive yap */
+@media (max-width: 700px) {
   .tasinmaz-table th, .tasinmaz-table td {
-    padding: 10px 8px;
+    padding: 8px 6px;
     font-size: 0.95rem;
   }
 }
 
-/* Butonları kutu içinde ve arka planı belirgin yap */
+/* Buton barı sade */
 .tasinmaz-action-bar {
-  background: #e3eefd;
-  padding: 18px 20px 14px 20px;
-  border-radius: 10px;
-  margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+  background: #da0a0a;
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(44,62,80,0.04);
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
-/* Butonlar daha belirgin ve okunaklı */
+/* Sade butonlar */
 .tasinmaz-action-btn {
-  font-size: 1.08rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   border-radius: 6px;
-  border: none;
-  padding: 12px 28px;
+  border: 1px solid #d1d5db;
+  padding: 10px 22px;
   cursor: pointer;
+  background: #e3eefd;
+  color: #232526;
   box-shadow: none;
-  background: #1976d2; /* varsayılan mavi */
-  color: #fff;
+  transition: none;
 }
 
-/* Her buton için düz renk */
 .tasinmaz-action-btn.logout {
-  background: #e53935;
-  color: #fff;
+  background: #fbeaea;
+  color: #d7263d;
+  border-color: #f5bdbd;
 }
+
 .tasinmaz-action-btn.add {
-  background: #1976d2;
-  color: #fff;
+  background: #e3eefd;
+  color: #1976d2;
+  border-color: #b3d1f7;
+}
+
+.tasinmaz-action-btn.export {
+  background: #e6f9e6;
+  color: #197d2d;
+  border-color: #b2e2b2;
+}
+
+.tasinmaz-action-btn.export:last-child {
+  background: #fff4e6;
+  color: #fb8c00;
+  border-color: #ffd9b3;
+}
+
+/* Disabled buton */
+.tasinmaz-action-btn:disabled {
+  background: #a82020;
+  color: #000000;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* Hover'da hiçbir şey olmasın */
@@ -104,8 +125,8 @@
 .tasinmaz-action-btn:focus {
   background: inherit;
   color: inherit;
+  border-color: inherit;
   box-shadow: none;
   filter: none;
   outline: none;
 }
-/*taşınmaz list sayfasınn tüm düzenlerini içerio

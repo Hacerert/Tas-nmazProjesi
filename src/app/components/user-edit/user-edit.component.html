@@ -1,0 +1,102 @@
+<!-- src/app/components/user-edit/user-edit.component.html -->
+<div class="container mx-auto p-6 bg-gray-50 min-h-screen rounded-xl shadow-2xl">
+  <div class="flex justify-between items-center mb-8 border-b-2 border-gray-200 pb-4">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">
+      {{ isNewUser ? 'Yeni Kullanıcı Ekle' : 'Kullanıcıyı Düzenle' }}
+    </h1>
+    <button
+      (click)="goBack()"
+      class="px-8 py-3 bg-gray-600 text-white font-bold rounded-lg shadow-lg hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 transition duration-300 ease-in-out transform hover:scale-105"
+    >
+      Geri Dön
+    </button>
+  </div>
+
+  <!-- Hata Mesajı -->
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg relative mb-6 shadow-md" role="alert">
+    <strong class="font-bold text-lg">Hata!</strong>
+    <span class="block sm:inline ml-3 text-base">{{ error }}</span>
+  </div>
+
+  <!-- Yükleniyor Mesajı (Sadece mevcut kullanıcı düzenlenirken göster) -->
+  <div *ngIf="loading && !isNewUser" class="text-center py-12 text-gray-600 text-xl font-medium">
+    Kullanıcı bilgileri yükleniyor...
+  </div>
+
+  <!-- Kullanıcı Formu -->
+  <div *ngIf="!loading || isNewUser" class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <!-- Kullanıcı Adı -->
+      <div class="mb-6">
+        <label for="username" class="block text-gray-700 text-lg font-semibold mb-2">Kullanıcı Adı:</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+          [class.border-red-500]="userForm.get('username')?.invalid && userForm.get('username')?.touched"
+        >
+        <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-red-500 text-sm mt-2">
+          Kullanıcı adı zorunludur.
+        </div>
+      </div>
+
+      <!-- E-posta -->
+      <div class="mb-6">
+        <label for="email" class="block text-gray-700 text-lg font-semibold mb-2">E-posta:</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+          [class.border-red-500]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+        >
+        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 text-sm mt-2">
+          Geçerli bir e-posta adresi giriniz.
+        </div>
+      </div>
+
+      <!-- Rol -->
+      <div class="mb-6">
+        <label for="role" class="block text-gray-700 text-lg font-semibold mb-2">Rol:</label>
+        <select
+          id="role"
+          formControlName="role"
+          class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+          [class.border-red-500]="userForm.get('role')?.invalid && userForm.get('role')?.touched"
+        >
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+        <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-red-500 text-sm mt-2">
+          Rol seçimi zorunludur.
+        </div>
+      </div>
+
+      <!-- Şifre (Sadece yeni kullanıcı eklerken veya şifre değiştirirken görünür) -->
+      <div class="mb-6" *ngIf="isNewUser || userForm.get('password')?.value">
+        <label for="password" class="block text-gray-700 text-lg font-semibold mb-2">Şifre:</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+          [class.border-red-500]="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+        >
+        <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-red-500 text-sm mt-2">
+          Şifre en az 6 karakter olmalıdır.
+        </div>
+      </div>
+
+      <!-- Kaydet Butonu -->
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          [disabled]="userForm.invalid"
+          class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          {{ isNewUser ? 'Kullanıcı Ekle' : 'Değişiklikleri Kaydet' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

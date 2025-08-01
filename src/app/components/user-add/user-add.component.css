@@ -1,0 +1,99 @@
+/* src/app/components/user-add/user-add.component.css */
+
+.container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Form input focus animasyonu */
+input:focus, select:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Buton hover efektleri */
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Disabled buton stilleri */
+button:disabled {
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Hata mesajları için animasyon */
+.text-red-500 {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Form geçişleri */
+.bg-white {
+  transition: all 0.3s ease-in-out;
+}
+
+.bg-white:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive tasarım */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .text-4xl {
+    font-size: 2rem;
+  }
+  
+  .max-w-2xl {
+    max-width: 100%;
+  }
+  
+  .flex.justify-between {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .px-8 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Animasyonlar */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input placeholder stilleri */
+input::placeholder, select::placeholder {
+  color: #9CA3AF;
+  font-style: italic;
+}
+
+/* Form focus ring customization */
+.focus\:ring-blue-500:focus {
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+}
+
+.focus\:ring-green-300:focus {
+  --tw-ring-color: rgb(134 239 172 / 0.5);
+}
+
+.focus\:ring-gray-300:focus {
+  --tw-ring-color: rgb(209 213 219 / 0.5);
+}
