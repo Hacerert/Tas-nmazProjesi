@@ -98,7 +98,17 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    console.log('🚪 UserManagement - Logout butonuna tıklandı');
     this.authService.logout();
-    this.router.navigate(['/login']);
+    console.log('🔄 UserManagement - Login sayfasına yönlendiriliyor...');
+    
+    // Router navigation dene, başarısız olursa window.location kullan
+    this.router.navigate(['/login']).then(() => {
+      console.log('✅ UserManagement - Login sayfasına başarıyla yönlendirildi');
+    }).catch((error) => {
+      console.error('❌ UserManagement - Router navigation hatası:', error);
+      console.log('🔄 UserManagement - Window.location ile yönlendiriliyor...');
+      window.location.href = '/login';
+    });
   }
 }

@@ -1,102 +1,103 @@
-// src/app/tasinmaz-list/tasinmaz-list.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TasinmazService, Tasinmaz } from '../services/tasinmaz.service';
-import { AuthService } from '../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription, forkJoin } from 'rxjs'; // forkJoin import edildi
+import { TasinmazListDto, TasinmazService } from '../services/tasinmaz.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-tasinmaz-list',
   templateUrl: './tasinmaz-list.component.html',
   styleUrls: ['./tasinmaz-list.component.css']
 })
-export class TasinmazListComponent implements OnInit, OnDestroy {
+export class TasinmazListComponent implements OnInit {
 
-  tasinmazlar: Tasinmaz[] = [];
+  tasinmazlar: TasinmazListDto[] = [];
   loading: boolean = true;
   error: string | null = null;
-  private userIdSubscription: Subscription | undefined;
-  selectedTasinmazIds: number[] = []; // Seçilen taşınmaz ID'lerini tutacak dizi
+  selectedTasinmazIds: number[] = [];
+  showModal: boolean = false;
+  modalMessage: string = '';
+  modalCallback: Function | null = null;
 
   constructor(
     private tasinmazService: TasinmazService,
-    private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.userIdSubscription = this.authService.userId$.subscribe(userId => {
-      console.log('TasinmazListComponent (ngOnInit): userId$ güncellendi:', userId);
-      if (userId !== null) {
-        // userId string geldiği için number'a çeviriyoruz
-        const numericUserId = parseInt(userId, 10);
-        if (!isNaN(numericUserId)) {
-          this.loadTasinmazlar(numericUserId);
-        } else {
-          console.error('TasinmazListComponent: Geçersiz Kullanıcı ID formatı:', userId);
-          this.error = 'Kullanıcı ID\'si geçersiz formatta.';
-          this.loading = false;
-          this.tasinmazlar = [];
-        }
-      } else {
-        // isAuthenticated() yerine isLoggedIn() kullanıldı
-        if (this.authService.isLoggedIn()) {
-          console.error('TasinmazListComponent: isLoggedIn true olmasına rağmen userId null.');
-          this.error = 'Kullanıcı oturumu aktif ancak ID alınamadı.';
-        } else {
-          console.log('TasinmazListComponent: Kullanıcı ID null ve kimlik doğrulaması yapılmamış, login sayfasına yönlendiriliyor.');
-          this.router.navigate(['/login']);
-        }
-        this.loading = false;
-        this.tasinmazlar = [];
-        this.error = this.error || 'Kullanıcı oturumu bulunamadı veya geçersiz.';
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.userIdSubscription) {
-      this.userIdSubscription.unsubscribe();
-    }
+    this.getTasinmazlar();
   }
 
   /**
-   * Backend'den taşınmaz verilerini çeker.
-   * @param userId Taşınmazları çekilecek kullanıcının ID'si.
+   * Veritabanından tüm taşınmazları çeker.
    */
-  loadTasinmazlar(userId: number): void {
+  getTasinmazlar(): void {
     this.loading = true;
-    this.error = null;
-    this.selectedTasinmazIds = []; // Yeni yüklemede seçimleri sıfırla
-
-    console.log('TasinmazListComponent (loadTasinmazlar): Taşınmazlar yükleniyor, Kullanıcı ID:', userId);
-
-    this.tasinmazService.getKullaniciTasinmazlarim(userId).subscribe({
+    this.tasinmazService.getTasinmazlar().subscribe({
       next: (data) => {
         this.tasinmazlar = data;
         this.loading = false;
-        console.log('TasinmazListComponent (loadTasinmazlar): Taşınmazlar başarıyla yüklendi:', this.tasinmazlar);
+        this.error = null;
       },
-      error: (err) => {
-        this.error = 'Taşınmazlar alınırken bir hata oluştu. Lütfen konsolu kontrol edin.';
+      error: (e) => {
+        this.error = 'Taşınmazlar yüklenirken bir hata oluştu.';
         this.loading = false;
-        console.error('TasinmazListComponent (loadTasinmazlar): Taşınmazlar alınırken hata:', err);
-        if (err.status === 401) {
-          this.authService.logout();
-        } else if (err.status === 404) {
-          this.error = 'Bu kullanıcıya ait taşınmaz bulunamadı.';
-          this.tasinmazlar = [];
-        } else if (err.status === 0) {
-          this.error = 'Sunucuya ulaşılamadı. Backend çalışıyor mu?';
-        }
+        console.error(e);
       }
     });
   }
 
   /**
-   * Checkbox durumu değiştiğinde seçili ID'leri günceller.
-   * @param id Taşınmaz ID'si.
-   * @param event Checkbox değişim olayı.
+   * Yeni bir taşınmaz ekleme sayfasına yönlendirir.
+   */
+  addTasinmaz(): void {
+    this.router.navigate(['/tasinmaz-add']);
+  }
+
+  /**
+   * Seçilen taşınmazları silmek için onay modalını açar.
+   */
+  deleteSelectedTasinmazlar(): void {
+    if (this.selectedTasinmazIds.length === 0) {
+      return;
+    }
+    this.openModal(
+      'Seçilen ' + this.selectedTasinmazIds.length + ' adet taşınmazı silmek istediğinizden emin misiniz?',
+      () => this.onConfirmDeleteSelected()
+    );
+  }
+
+  /**
+   * Seçilen taşınmazları silme işlemini gerçekleştirir.
+   */
+  onConfirmDeleteSelected(): void {
+    this.selectedTasinmazIds.forEach(id => {
+      this.tasinmazService.deleteTasinmaz(id).subscribe({
+        next: () => {
+          console.log(`Taşınmaz (ID: ${id}) silindi.`);
+          this.getTasinmazlar(); // Listeyi yenile
+        },
+        error: (e) => {
+          this.error = 'Taşınmaz silinirken bir hata oluştu.';
+          console.error(e);
+        }
+      });
+    });
+    this.selectedTasinmazIds = [];
+    this.closeModal();
+  }
+
+
+
+  /**
+   * Taşınmaz düzenleme sayfasına yönlendirir.
+   */
+  editTasinmaz(id: number): void {
+    this.router.navigate(['/tasinmaz-edit', id]);
+  }
+
+  /**
+   * Checkbox seçimi değiştiğinde çalışır.
    */
   onCheckboxChange(id: number, event: any): void {
     if (event.target.checked) {
@@ -104,12 +105,10 @@ export class TasinmazListComponent implements OnInit, OnDestroy {
     } else {
       this.selectedTasinmazIds = this.selectedTasinmazIds.filter(tasinmazId => tasinmazId !== id);
     }
-    console.log('Seçilen Taşınmaz ID\'leri:', this.selectedTasinmazIds);
   }
 
   /**
-   * Tüm taşınmazları seçer veya seçimi kaldırır.
-   * @param event Tümünü Seç checkbox'ının değişim olayı.
+   * Hepsini seç/seçimi kaldır checkbox'ı için.
    */
   toggleSelectAll(event: any): void {
     if (event.target.checked) {
@@ -117,103 +116,50 @@ export class TasinmazListComponent implements OnInit, OnDestroy {
     } else {
       this.selectedTasinmazIds = [];
     }
-    console.log('Tümünü Seç/Seçimi Kaldır. Seçilen ID\'ler:', this.selectedTasinmazIds);
   }
 
   /**
-   * Seçilen tüm taşınmazları siler.
-   */
-  deleteSelectedTasinmazlar(): void {
-    const currentUserIdString = this.authService.getUserId();
-    if (currentUserIdString === null) {
-      this.error = 'Kullanıcı ID\'si bulunamadı. Lütfen tekrar giriş yapın.';
-      this.router.navigate(['/login']);
-      return;
-    }
-    const currentUserId = parseInt(currentUserIdString, 10);
-    if (isNaN(currentUserId)) {
-      this.error = 'Kullanıcı ID\'si geçersiz formatta.';
-      return;
-    }
-
-    if (this.selectedTasinmazIds.length === 0) {
-      alert('Lütfen silmek için en az bir taşınmaz seçin.');
-      return;
-    }
-
-    if (confirm(`Seçilen ${this.selectedTasinmazIds.length} adet taşınmazı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`)) {
-      console.log('Seçilen taşınmazlar siliniyor:', this.selectedTasinmazIds);
-
-      // Her bir seçilen taşınmaz için silme isteği gönder
-      const deleteObservables = this.selectedTasinmazIds.map(id =>
-        this.tasinmazService.deleteTasinmaz(id) // Tekil silme metodunu kullanıyoruz
-      );
-
-      // Tüm silme istekleri tamamlandığında
-      forkJoin(deleteObservables).subscribe({
-        next: () => {
-          console.log('Seçilen tüm taşınmazlar başarıyla silindi.');
-          this.loadTasinmazlar(currentUserId); // Listeyi yeniden yükle
-          this.selectedTasinmazIds = []; // Seçimleri sıfırla
-        },
-        error: (err) => {
-          console.error('Seçilen taşınmazlar silinirken hata:', err);
-          this.error = 'Seçilen taşınmazlar silinirken bir hata oluştu.';
-          if (err.status === 401) {
-            this.authService.logout();
-          } else if (err.status === 0) {
-            this.error = 'Sunucuya ulaşılamadı. Backend çalışıyor mu?';
-          }
-        }
-      });
-    }
-  }
-
-  /**
-   * "Düzenle" butonuna tıklandığında çalışır.
-   * @param id Düzenlenecek taşınmazın ID'si.
-   */
-  editTasinmaz(id: number): void {
-    console.log('Düzenlenecek Taşınmaz ID:', id);
-    this.router.navigate(['/tasinmaz-duzenle', id]);
-  }
-
-  /**
-   * "Yeni Taşınmaz Ekle" butonu için metod.
-   */
-  addTasinmaz(): void {
-    this.router.navigate(['/tasinmaz-ekle']);
-  }
-
-  // BURASI EKSİKTİ VEYA YANLIŞTI, ŞİMDİ DOĞRU ŞEKİLDE EKLENDİ!
-  deleteTasinmaz(id: number): void {
-    if (confirm('Bu taşınmazı silmek istediğinizden emin misiniz?')) {
-      this.tasinmazService.deleteTasinmaz(id).subscribe({
-        next: () => {
-          alert('Taşınmaz başarıyla silindi.');
-          // currentUserId'yi kullanarak listeyi yeniden yükle
-          const currentUserIdString = this.authService.getUserId();
-          if (currentUserIdString) {
-            const numericUserId = parseInt(currentUserIdString, 10);
-            if (!isNaN(numericUserId)) {
-              this.loadTasinmazlar(numericUserId);
-            }
-          }
-        },
-        error: (err) => {
-          console.error('Taşınmaz silinirken hata oluştu', err);
-          alert('Taşınmaz silinirken bir hata oluştu: ' + (err.error?.message || err.message));
-        }
-      });
-    }
-  }
-
-  /**
-   * "Çıkış Yap" butonu için metod.
-   * AuthService üzerindeki logout metodunu çağırır.
+   * Kullanıcı çıkış işlemini yapar.
    */
   logout(): void {
+    console.log('🚪 TasinmazList - Logout butonuna tıklandı');
     this.authService.logout();
-    this.router.navigate(['/login']);
+    console.log('🔄 TasinmazList - Login sayfasına yönlendiriliyor...');
+    
+    // Router navigation dene, başarısız olursa window.location kullan
+    this.router.navigate(['/login']).then(() => {
+      console.log('✅ TasinmazList - Login sayfasına başarıyla yönlendirildi');
+    }).catch((error) => {
+      console.error('❌ TasinmazList - Router navigation hatası:', error);
+      console.log('🔄 TasinmazList - Window.location ile yönlendiriliyor...');
+      window.location.href = '/login';
+    });
+  }
+
+  /**
+   * Modal pop-up açar.
+   */
+  openModal(message: string, callback: Function): void {
+    this.modalMessage = message;
+    this.modalCallback = callback;
+    this.showModal = true;
+  }
+
+  /**
+   * Modal pop-up'ı kapatır.
+   */
+  closeModal(): void {
+    this.showModal = false;
+    this.modalMessage = '';
+    this.modalCallback = null;
+  }
+
+  /**
+   * Modal'daki Tamam butonuna basıldığında callback'i çalıştırır.
+   */
+  confirmAction(): void {
+    if (this.modalCallback) {
+      this.modalCallback();
+    }
   }
 }

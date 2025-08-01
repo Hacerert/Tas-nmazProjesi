@@ -1,74 +1,65 @@
-// src/app/services/tasinmaz.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service'; // AuthService'i import et
 
-// Tasinmaz interface'ini burada tanımlıyoruz
-export interface Tasinmaz {
-  id?: number; // Backend'de otomatik oluştuğu için opsiyonel
+// Backend API'nizin temel URL'sini buraya yazın.
+const API_URL = 'http://localhost:5000/api/Tasinmaz';
+
+// Backend'den gelen verilere uyan arayüz
+export interface TasinmazListDto {
+  id?: number;
+  ada: string;
+  parsel: string;
+  adres: string;
+  koordinat: string;
+  tasinmazTipi?: string;
+  mahalleId: number;
+}
+
+// Yeni taşınmaz eklemek için kullanılan arayüz
+export interface TasinmazAddRequest {
+  ilId: number;
+  ilceId: number;
+  mahalleId: number;
   ada: string;
   parsel: string;
   adres: string;
   koordinat: string;
   tasinmazTipi: string;
-  userId: number;
-  // İl, İlçe ve Mahalle artık doğrudan string değil, iç içe objeler
-  mahalle: { // Mahalle bir obje
-    id: number;
-    ad: string; // Mahalle adı burada
-    ilce: { // İlçe bir obje
-      id: number;
-      ad: string; // İlçe adı burada
-      il: { // İl bir obje
-        id: number;
-        ad: string; // İl adı burada
-      };
-    };
-  };
+  userId: string;
 }
+
 @Injectable({
   providedIn: 'root'
 })
 export class TasinmazService {
-  private apiUrl = 'http://localhost:5000/api/Tasinmaz'; // Backend API URL'si
+  constructor(private http: HttpClient) { }
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    if (token) {
-      return new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      });
-    }
-    // Token yoksa bile Content-Type ile dön
-    return new HttpHeaders({ 'Content-Type': 'application/json' });
+  /**
+   * Backend'den gelen TasinmazListDto listesini çeker.
+   */
+  getTasinmazlar(): Observable<TasinmazListDto[]> {
+    return this.http.get<TasinmazListDto[]>(API_URL);
   }
 
-  // Kullanıcının taşınmazlarını getiren metot - URL DÜZELTİLDİ
-  getKullaniciTasinmazlarim(userId: number): Observable<Tasinmaz[]> {
-    return this.http.get<Tasinmaz[]>(`${this.apiUrl}/kullanici-tasinmazlarim/${userId}`, { headers: this.getAuthHeaders() });
+  /**
+   * Kullanıcı ID'sine göre TasinmazListDto listesini çeker.
+   */
+  getKullaniciTasinmazlarim(userId: number): Observable<TasinmazListDto[]> {
+    return this.http.get<TasinmazListDto[]>(`${API_URL}/GetByUserId/${userId}`);
   }
 
-  // Yeni taşınmaz ekleme metodu
-  addTasinmaz(tasinmaz: Tasinmaz): Observable<Tasinmaz> {
-    return this.http.post<Tasinmaz>(this.apiUrl, tasinmaz, { headers: this.getAuthHeaders() });
+  /**
+   * Yeni bir taşınmaz ekler.
+   */
+  addTasinmaz(tasinmaz: TasinmazAddRequest): Observable<TasinmazAddRequest> {
+    return this.http.post<TasinmazAddRequest>(API_URL, tasinmaz);
   }
 
-  // Taşınmaz güncelleme metodu (SRS'de var)
-  updateTasinmaz(id: number, tasinmaz: Tasinmaz): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, tasinmaz, { headers: this.getAuthHeaders() });
-  }
-
-  // Taşınmaz silme metodu (SRS'de var)
+  /**
+   * Belirtilen ID'deki taşınmazı siler.
+   */
   deleteTasinmaz(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
-  }
-
-  // Tek bir taşınmazı ID ile getirme metodu (SRS'de var)
-  getTasinmazById(id: number): Observable<Tasinmaz> {
-    return this.http.get<Tasinmaz>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.delete(`${API_URL}/${id}`);
   }
 }

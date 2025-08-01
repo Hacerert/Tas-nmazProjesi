@@ -1,159 +1,125 @@
-<div class="tasinmaz-edit-bg">
-  <div class="tasinmaz-edit-box">
-    <h2 class="tasinmaz-edit-title">Taşınmazı Düzenle</h2>
-    <form [formGroup]="tasinmazForm" (ngSubmit)="onSubmit()">
-      <div class="mb-4">
-        <label class="block text-gray-700 font-semibold mb-2">İl</label>
-        <input class="w-full border rounded px-3 py-2" formControlName="il" placeholder="İl" />
+<!-- src/app/tasinmaz-edit/tasinmaz-edit.component.html -->
+<div class="tasinmaz-add-bg">
+  <div class="tasinmaz-add-box">
+    <h2 class="tasinmaz-add-title">Taşınmaz Düzenle</h2>
+    
+    <!-- Yükleniyor Mesajı -->
+    <div *ngIf="loading" class="text-center py-12 text-gray-600 text-xl font-medium">
+      Taşınmaz bilgileri yükleniyor...
+    </div>
+
+    <form *ngIf="!loading" [formGroup]="tasinmazForm" (ngSubmit)="onSubmit()">
+      
+      <!-- İl Seçimi -->
+      <div>
+        <label for="il">İl</label>
+        <select id="il" formControlName="il" (change)="onIlChange()">
+          <option value="" disabled>Bir il seçin</option>
+          <option *ngFor="let il of iller" [value]="il.id">{{ il.ad }}</option>
+        </select>
+        <div *ngIf="tasinmazForm.get('il')?.invalid && tasinmazForm.get('il')?.touched" class="error-msg">
+          İl seçimi zorunludur.
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 font-semibold mb-2">İlçe</label>
-        <input class="w-full border rounded px-3 py-2" formControlName="ilce" placeholder="İlçe" />
+
+      <!-- İlçe Seçimi -->
+      <div>
+        <label for="ilce">İlçe</label>
+        <select id="ilce" formControlName="ilce" (change)="onIlceChange()" [disabled]="!tasinmazForm.get('il')?.value">
+          <option value="" disabled>Bir ilçe seçin</option>
+          <option *ngFor="let ilce of ilceler" [value]="ilce.id">{{ ilce.ad }}</option>
+        </select>
+        <div *ngIf="tasinmazForm.get('ilce')?.invalid && tasinmazForm.get('ilce')?.touched" class="error-msg">
+          İlçe seçimi zorunludur.
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 font-semibold mb-2">Mahalle</label>
-        <input class="w-full border rounded px-3 py-2" formControlName="mahalle" placeholder="Mahalle" />
+      
+      <!-- Mahalle Seçimi -->
+      <div>
+        <label for="mahalle">Mahalle</label>
+        <select id="mahalle" formControlName="mahalle" [disabled]="!tasinmazForm.get('ilce')?.value">
+          <option value="" disabled>Bir mahalle seçin</option>
+          <option *ngFor="let mahalle of mahalleler" [value]="mahalle.id">{{ mahalle.ad }}</option>
+        </select>
+        <div *ngIf="tasinmazForm.get('mahalle')?.invalid && tasinmazForm.get('mahalle')?.touched" class="error-msg">
+          Mahalle seçimi zorunludur.
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 font-semibold mb-2">Ada</label>
-        <input class="w-full border rounded px-3 py-2" formControlName="ada" placeholder="Ada" />
+
+      <!-- Diğer Alanlar -->
+      <div class="tasinmaz-add-grid">
+        <div>
+          <label for="ada">Ada</label>
+          <input type="text" id="ada" formControlName="ada" placeholder="Ada numarası">
+          <div *ngIf="tasinmazForm.get('ada')?.invalid && tasinmazForm.get('ada')?.touched" class="error-msg">
+            Ada numarası zorunludur ve sadece rakam içermelidir.
+          </div>
+        </div>
+        
+        <div>
+          <label for="parsel">Parsel</label>
+          <input type="text" id="parsel" formControlName="parsel" placeholder="Parsel numarası">
+          <div *ngIf="tasinmazForm.get('parsel')?.invalid && tasinmazForm.get('parsel')?.touched" class="error-msg">
+            Parsel numarası zorunludur ve sadece rakam içermelidir.
+          </div>
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 font-semibold mb-2">Parsel</label>
-        <input class="w-full border rounded px-3 py-2" formControlName="parsel" placeholder="Parsel" />
+
+      <div class="full">
+        <label for="adres">Adres</label>
+        <textarea id="adres" formControlName="adres" rows="3" placeholder="Açık adres"></textarea>
+        <div *ngIf="tasinmazForm.get('adres')?.invalid && tasinmazForm.get('adres')?.touched" class="error-msg">
+          Adres bilgisi zorunludur.
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 font-semibold mb-2">Nitelik</label>
-        <input class="w-full border rounded px-3 py-2" formControlName="nitelik" placeholder="Nitelik" />
+
+      <div class="tasinmaz-add-grid">
+        <div>
+          <label for="koordinat">Koordinat</label>
+          <input type="text" id="koordinat" formControlName="koordinat" placeholder="Enlem, boylam">
+          <div *ngIf="tasinmazForm.get('koordinat')?.invalid && tasinmazForm.get('koordinat')?.touched" class="error-msg">
+            Koordinat bilgisi zorunludur.
+          </div>
+        </div>
+        
+        <div>
+          <label for="tasinmazTipi">Taşınmaz Tipi</label>
+          <select id="tasinmazTipi" formControlName="tasinmazTipi">
+            <option value="" disabled>Bir tip seçin</option>
+            <option *ngFor="let tip of tasinmazTipleri" [value]="tip">{{ tip }}</option>
+          </select>
+          <div *ngIf="tasinmazForm.get('tasinmazTipi')?.invalid && tasinmazForm.get('tasinmazTipi')?.touched" class="error-msg">
+            Taşınmaz tipi seçimi zorunludur.
+          </div>
+        </div>
       </div>
-      <div style="background:none; box-shadow:none; padding:0;">
-        <button type="submit" class="tasinmaz-action-btn add">Kaydet</button>
-        <button type="button" class="tasinmaz-action-btn logout" (click)="cancel()">İptal</button>
+
+      <!-- Hata Mesajı -->
+      <div *ngIf="error" class="error-msg">
+        {{ error }}
       </div>
-      <div *ngIf="message" class="mt-4 text-center" [ngClass]="isSuccess ? 'text-green-600' : 'text-red-600'">
-        {{ message }}
+
+      <!-- Başarı Mesajı -->
+      <div *ngIf="successMessage" class="success-msg">
+        {{ successMessage }}
+      </div>
+
+      <!-- Butonlar -->
+      <div class="tasinmaz-add-grid">
+        <button type="button" (click)="goBack()" class="tasinmaz-add-btn" style="background: #6b7280;">
+          <span>Geri Dön</span>
+        </button>
+        
+        <button type="submit" [disabled]="tasinmazForm.invalid || loading" class="tasinmaz-add-btn">
+          <span *ngIf="loading" class="spinner-border"></span>
+          <span *ngIf="!loading">Güncelle</span>
+          <span *ngIf="loading">Güncelleniyor...</span>
+        </button>
+      </div>
+
+      <div class="back-link">
+        <a href="/tasinmaz-list">← Taşınmaz Listesine Dön</a>
       </div>
     </form>
   </div>
 </div>
-
-<style>
-/* Sayfa ortalama ve arka plan */
-.tasinmaz-edit-bg {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f4f8fb;
-}
-
-/* Kutu */
-.tasinmaz-edit-box {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 24px rgba(44,62,80,0.13);
-  padding: 36px 32px 28px 32px;
-  width: 100%;
-  max-width: 420px;
-}
-
-/* Başlık */
-.tasinmaz-edit-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #1976d2;
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-/* Form elemanları */
-label {
-  color: #232526;
-  font-weight: 600;
-  margin-bottom: 4px;
-  font-size: 0.98rem;
-  display: block;
-}
-
-input {
-  width: 100%;
-  background: #fafafa;
-  border: 1.5px solid #d1d5db;
-  border-radius: 6px;
-  padding: 10px 12px;
-  font-size: 1rem;
-  color: #232526;
-  font-weight: 500;
-  margin-top: 2px;
-  margin-bottom: 12px;
-  transition: border 0.2s;
-}
-
-input:focus {
-  border-color: #1976d2;
-  outline: none;
-}
-
-button,
-.tasinmaz-action-btn {
-  font-size: 1.08rem;
-  font-weight: 700;
-  border-radius: 6px;
-  border: none;
-  padding: 12px 28px;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-}
-
-/* Her buton için düz renk */
-.tasinmaz-action-btn.logout,
-button.logout {
-  background: #e53935;
-  color: #fff;
-}
-
-.tasinmaz-action-btn.add,
-button.add {
-  background: #1976d2;
-  color: #fff;
-}
-
-.tasinmaz-action-btn.export,
-button.export {
-  background: #43a047;
-  color: #fff;
-}
-
-.tasinmaz-action-btn.pdf,
-button.pdf {
-  background: #fb8c00;
-  color: #fff;
-}
-
-/* Hover'da hiçbir şey olmasın */
-.tasinmaz-action-btn:hover,
-button:hover {
-  background: inherit;
-  color: inherit;
-  box-shadow: none;
-  filter: none;
-  transition: none;
-}
-
-.mt-4 {
-  margin-top: 1rem;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-green-600 {
-  color: #197d2d;
-}
-
-.text-red-600 {
-  color: #d7263d;
-}
-</style>

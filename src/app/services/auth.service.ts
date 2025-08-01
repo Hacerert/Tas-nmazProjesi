@@ -45,15 +45,52 @@ export class AuthService {
   }
 
   logout(): void {
+    console.log('🚪 Logout işlemi başlatıldı');
+    
+    // Tüm authentication state'ini temizle
     localStorage.removeItem('jwt_token');
+    localStorage.clear(); // Diğer potansiyel auth verilerini de temizle
+    
+    // BehaviorSubject'leri null yap
     this.tokenSubject.next(null);
     this.userRoleSubject.next(null);
     this.userIdSubject.next(null);
+    
+    console.log('✅ Logout işlemi tamamlandı - tüm auth state temizlendi');
+  }
+
+  // Acil durum logout metodu
+  forceLogout(): void {
+    console.log('🚨 Force logout işlemi başlatıldı');
+    this.logout();
+    // Router navigation başarısız olursa window.location kullan
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 100);
   }
 
   isLoggedIn(): boolean {
-    const token = this.tokenSubject.value;
-    return !!token && !this.jwtHelper.isTokenExpired(token);
+    const token = this.tokenSubject.value || localStorage.getItem('jwt_token');
+    
+    if (!token) {
+      console.log('❌ isLoggedIn: Token bulunamadı');
+      return false;
+    }
+    
+    try {
+      const isExpired = this.jwtHelper.isTokenExpired(token);
+      if (isExpired) {
+        console.log('❌ isLoggedIn: Token süresi dolmuş, logout yapılıyor');
+        this.logout();
+        return false;
+      }
+      console.log('✅ isLoggedIn: Token geçerli');
+      return true;
+    } catch (error) {
+      console.error('❌ isLoggedIn: Token kontrol hatası:', error);
+      this.logout();
+      return false;
+    }
   }
 
   getToken(): string | null {
