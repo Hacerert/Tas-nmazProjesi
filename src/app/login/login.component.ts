@@ -16,10 +16,9 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    // Eğer kullanıcı zaten giriş yapmış ve token'ı geçerliyse, taşınmazlar sayfasına yönlendir
-    // isAuthenticated() yerine isLoggedIn() kullanıldı
+    // Eğer kullanıcı zaten giriş yapmış ve token'ı geçerliyse, rolüne göre yönlendir
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/tasinmazlar']);
+      this.redirectBasedOnRole();
     }
   }
 
@@ -29,8 +28,8 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(credentials).subscribe({
       next: (res) => {
-        // Başarılı giriş sonrası yönlendirme
-        this.router.navigate(['/tasinmazlar']);
+        // Başarılı giriş sonrası rolüne göre yönlendirme
+        this.redirectBasedOnRole();
       },
       error: (error) => {
         console.error('❌ Giriş hatası:', error);
@@ -44,5 +43,18 @@ export class LoginComponent implements OnInit {
         }
       }
     });
+  }
+
+  /**
+   * Kullanıcının rolüne göre uygun sayfaya yönlendirir
+   */
+  private redirectBasedOnRole(): void {
+    const userRole = this.authService.getUserRole();
+    
+    if (userRole === 'Admin') {
+      this.router.navigate(['/admin-dashboard']);
+    } else {
+      this.router.navigate(['/tasinmazlar']);
+    }
   }
 }

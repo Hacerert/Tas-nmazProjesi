@@ -26,13 +26,11 @@ export class AuthGuard implements CanActivate {
     return this.authService.userRole$.pipe(
       map(role => {
         if (role === 'Admin') {
-          // Admin kullanıcılar admin panel rotalarına erişebilir
+          // Admin kullanıcılar sadece admin panel rotalarına erişebilir
           if (state.url.startsWith('/admin')) {
             return true; // Admin paneli ve alt sayfalarına erişime izin ver
-          } else if (state.url === '/tasinmazlar' || state.url.startsWith('/tasinmaz-')) {
-            return true; // Admin'ler taşınmaz sayfalarına da erişebilir
           } else {
-            // Varsayılan olarak admin-dashboard'a yönlendir
+            // Admin'ler taşınmaz sayfalarına erişemez, varsayılan olarak admin-dashboard'a yönlendir
             this.router.navigate(['/admin-dashboard']);
             return false;
           }
