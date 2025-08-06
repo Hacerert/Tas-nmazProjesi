@@ -1,0 +1,57 @@
+/* src/app/user-management/user-management.component.css */
+
+/* Genel kapsayıcı için maksimum genişlik ve ortalama */
+.container {
+  max-width: 1200px; /* Daha okunaklı bir genişlik */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Tablo için özel stiller */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Kenarlıkları birleştir */
+}
+
+th, td {
+  padding: 1rem 1.5rem; /* px-6 py-4 karşılığı */
+  text-align: left;
+  vertical-align: middle; /* Dikey hizalama */
+}
+
+thead th {
+  background-color: #f3f4f6; /* bg-gray-100 */
+  color: #4b5563; /* text-gray-700 */
+  font-weight: 600; /* font-semibold */
+  text-transform: uppercase;
+  font-size: 0.875rem; /* text-sm */
+  border-bottom: 2px solid #d1d5db; /* border-b-2 border-gray-300 */
+}
+
+tbody tr {
+  border-bottom: 1px solid #e5e7eb; /* border-b border-gray-100 */
+}
+
+tbody tr:last-child {
+  border-bottom: none; /* Son satırda alt çizgi olmasın */
+}
+
+tbody tr:hover {
+  background-color: #f9fafb; /* hover:bg-gray-50 */
+}
+
+/* Butonlar için genel geçiş efekti */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* SVG ikon boyutları */
+svg {
+  width: 1.75rem; /* w-7 */
+  height: 1.75rem; /* h-7 */
+}
+
+/* Hata mesajı için ek gölge */
+.bg-red-100.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}

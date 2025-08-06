@@ -1,0 +1,108 @@
+<!-- src/app/components/tasinmaz-add/tasinmaz-add.component.html -->
+<div class="tasinmaz-add-bg">
+  <div class="tasinmaz-add-box">
+    <h2 class="tasinmaz-add-title">Yeni Taşınmaz Ekle</h2>
+    
+    <form [formGroup]="tasinmazForm" (ngSubmit)="onSubmit()">
+      
+      <!-- İl Seçimi -->
+      <div>
+        <label for="il">İl</label>
+        <select id="il" formControlName="il" (change)="onIlChange()" [disabled]="loading">
+          <option value="" disabled selected>Bir il seçin</option>
+          <option *ngFor="let il of iller" [value]="il.id">{{ il.ad }}</option>
+        </select>
+        <div *ngIf="tasinmazForm.get('il')?.invalid && tasinmazForm.get('il')?.touched" class="error-msg">
+          İl seçimi zorunludur.
+        </div>
+      </div>
+
+      <!-- İlçe Seçimi -->
+      <div>
+        <label for="ilce">İlçe</label>
+        <select id="ilce" formControlName="ilce" (change)="onIlceChange()" [disabled]="!tasinmazForm.get('il')?.value || loading">
+          <option value="" disabled selected>Bir ilçe seçin</option>
+          <option *ngFor="let ilce of ilceler" [value]="ilce.id">{{ ilce.ad }}</option>
+        </select>
+        <div *ngIf="tasinmazForm.get('ilce')?.invalid && tasinmazForm.get('ilce')?.touched" class="error-msg">
+          İlçe seçimi zorunludur.
+        </div>
+      </div>
+      
+      <!-- Mahalle Seçimi -->
+      <div>
+        <label for="mahalle">Mahalle</label>
+        <select id="mahalle" formControlName="mahalle" [disabled]="!tasinmazForm.get('ilce')?.value || loading">
+          <option value="" disabled selected>Bir mahalle seçin</option>
+          <option *ngFor="let mahalle of mahalleler" [value]="mahalle.id">{{ mahalle.ad }}</option>
+        </select>
+        <div *ngIf="tasinmazForm.get('mahalle')?.invalid && tasinmazForm.get('mahalle')?.touched" class="error-msg">
+          Mahalle seçimi zorunludur.
+        </div>
+      </div>
+
+      <!-- Diğer Alanlar -->
+      <div class="tasinmaz-add-grid">
+        <div>
+          <label for="ada">Ada</label>
+          <input type="text" id="ada" formControlName="ada" placeholder="Ada numarası" [disabled]="loading">
+          <div *ngIf="tasinmazForm.get('ada')?.invalid && tasinmazForm.get('ada')?.touched" class="error-msg">
+            Ada numarası zorunludur ve sadece rakam içermelidir.
+          </div>
+        </div>
+        
+        <div>
+          <label for="parsel">Parsel</label>
+          <input type="text" id="parsel" formControlName="parsel" placeholder="Parsel numarası" [disabled]="loading">
+          <div *ngIf="tasinmazForm.get('parsel')?.invalid && tasinmazForm.get('parsel')?.touched" class="error-msg">
+            Parsel numarası zorunludur ve sadece rakam içermelidir.
+          </div>
+        </div>
+      </div>
+
+      <div class="full">
+        <label for="adres">Adres</label>
+        <textarea id="adres" formControlName="adres" rows="3" placeholder="Açık adres" [disabled]="loading"></textarea>
+        <div *ngIf="tasinmazForm.get('adres')?.invalid && tasinmazForm.get('adres')?.touched" class="error-msg">
+          Adres bilgisi zorunludur.
+        </div>
+      </div>
+
+      <div class="tasinmaz-add-grid">
+        <div>
+          <label for="koordinat">Koordinat</label>
+          <input type="text" id="koordinat" formControlName="koordinat" placeholder="Enlem, boylam" [disabled]="loading">
+          <div *ngIf="tasinmazForm.get('koordinat')?.invalid && tasinmazForm.get('koordinat')?.touched" class="error-msg">
+            Koordinat bilgisi zorunludur.
+          </div>
+        </div>
+        
+        <div>
+          <label for="tasinmazTipi">Taşınmaz Tipi</label>
+          <select id="tasinmazTipi" formControlName="tasinmazTipi" [disabled]="loading">
+            <option value="" disabled selected>Bir tip seçin</option>
+            <option *ngFor="let tip of tasinmazTipleri" [value]="tip">{{ tip }}</option>
+          </select>
+          <div *ngIf="tasinmazForm.get('tasinmazTipi')?.invalid && tasinmazForm.get('tasinmazTipi')?.touched" class="error-msg">
+            Taşınmaz tipi seçimi zorunludur.
+          </div>
+        </div>
+      </div>
+
+      <!-- Hata Mesajı -->
+      <div *ngIf="error" class="error-msg">
+        {{ error }}
+      </div>
+
+      <button type="submit" [disabled]="tasinmazForm.invalid || loading" class="tasinmaz-add-btn">
+        <span *ngIf="loading" class="spinner-border"></span>
+        <span *ngIf="!loading">Taşınmaz Ekle</span>
+        <span *ngIf="loading">Ekleniyor...</span>
+      </button>
+
+      <div class="back-link">
+        <a href="/tasinmaz-list">← Taşınmaz Listesine Dön</a>
+      </div>
+    </form>
+  </div>
+</div>

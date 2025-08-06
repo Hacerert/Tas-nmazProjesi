@@ -1,0 +1,132 @@
+/* Sade tablo stili */
+.tasinmaz-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.10);
+  margin-bottom: 32px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 2px solid #bdbdbd;
+  overflow: hidden;
+}
+
+.tasinmaz-table th,
+.tasinmaz-table td {
+  border: 1px solid #bdbdbd;
+  padding: 14px 18px;
+  font-size: 1.08rem;
+  text-align: left;
+}
+
+.tasinmaz-table th {
+  background: #f0f2f5;
+  color: #232526;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.tasinmaz-table td {
+  background: #fff;
+  color: #232526;
+  font-weight: 500;
+}
+
+.tasinmaz-table tbody tr:nth-child(even) td {
+  background: #f7faff;
+}
+
+.tasinmaz-table tbody tr:hover td {
+  background: #e3eefd;
+}
+
+/* Checkbox hizalama */
+.tasinmaz-table input[type="checkbox"] {
+  transform: scale(1.1);
+  margin-right: 4px;
+}
+
+/* Tablo başlıklarını daha koyu ve net yap */
+.tasinmaz-table th {
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+/* Tabloyu responsive yap */
+@media (max-width: 700px) {
+  .tasinmaz-table th, .tasinmaz-table td {
+    padding: 8px 6px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Buton barı sade */
+.tasinmaz-action-bar {
+  background: #da0a0a;
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(44,62,80,0.04);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Sade butonlar */
+.tasinmaz-action-btn {
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  padding: 10px 22px;
+  cursor: pointer;
+  background: #e3eefd;
+  color: #232526;
+  box-shadow: none;
+  transition: none;
+}
+
+.tasinmaz-action-btn.logout {
+  background: #fbeaea;
+  color: #d7263d;
+  border-color: #f5bdbd;
+}
+
+.tasinmaz-action-btn.add {
+  background: #e3eefd;
+  color: #1976d2;
+  border-color: #b3d1f7;
+}
+
+.tasinmaz-action-btn.export {
+  background: #e6f9e6;
+  color: #197d2d;
+  border-color: #b2e2b2;
+}
+
+.tasinmaz-action-btn.export:last-child {
+  background: #fff4e6;
+  color: #fb8c00;
+  border-color: #ffd9b3;
+}
+
+/* Disabled buton */
+.tasinmaz-action-btn:disabled {
+  background: #a82020;
+  color: #000000;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Hover'da hiçbir şey olmasın */
+.tasinmaz-action-btn:hover,
+.tasinmaz-action-btn:active,
+.tasinmaz-action-btn:focus {
+  background: inherit;
+  color: inherit;
+  border-color: inherit;
+  box-shadow: none;
+  filter: none;
+  outline: none;
+}
