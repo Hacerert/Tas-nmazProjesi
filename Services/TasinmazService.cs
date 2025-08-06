@@ -22,9 +22,6 @@ public class TasinmazService : ITasinmazService
     public async Task<List<CreateTasinmazDto>> GetAllAsync()
     {
         return await _context.Tasinmazlar
-            .Include(t => t.Mahalle)
-                .ThenInclude(m => m.Ilce)
-                    .ThenInclude(i => i.Il)
             .Select(t => new CreateTasinmazDto
             {
                 Id = t.Id,
@@ -32,24 +29,7 @@ public class TasinmazService : ITasinmazService
                 Parsel = t.Parsel,
                 Koordinat = t.Koordinat,
                 Adres = t.Adres,
-                MahalleId = t.MahalleId,
-                Mahalle = new MahalleDto
-                {
-                    Id = t.Mahalle.Id,
-                    Ad = t.Mahalle.Ad,
-                    IlceId = t.Mahalle.IlceId,
-                    Ilce = new IlceDto
-                    {
-                        Id = t.Mahalle.Ilce.Id,
-                        Ad = t.Mahalle.Ilce.Ad,
-                        IlId = t.Mahalle.Ilce.IlId,
-                        Il = new IlDto
-                        {
-                            Id = t.Mahalle.Ilce.Il.Id,
-                            Ad = t.Mahalle.Ilce.Il.Ad
-                        }
-                    }
-                }
+                MahalleId = t.MahalleId
             })
             .ToListAsync();
     }
@@ -57,9 +37,6 @@ public class TasinmazService : ITasinmazService
     public async Task<List<CreateTasinmazDto>> GetByUserIdAsync(int userId)
     {
         return await _context.Tasinmazlar
-            .Include(t => t.Mahalle)
-                .ThenInclude(m => m.Ilce)
-                    .ThenInclude(i => i.Il)
             .Where(t => t.UserId == userId)
             .Select(t => new CreateTasinmazDto
             {
@@ -68,24 +45,7 @@ public class TasinmazService : ITasinmazService
                 Parsel = t.Parsel,
                 Koordinat = t.Koordinat,
                 Adres = t.Adres,
-                MahalleId = t.MahalleId,
-                Mahalle = new MahalleDto
-                {
-                    Id = t.Mahalle.Id,
-                    Ad = t.Mahalle.Ad,
-                    IlceId = t.Mahalle.IlceId,
-                    Ilce = new IlceDto
-                    {
-                        Id = t.Mahalle.Ilce.Id,
-                        Ad = t.Mahalle.Ilce.Ad,
-                        IlId = t.Mahalle.Ilce.IlId,
-                        Il = new IlDto
-                        {
-                            Id = t.Mahalle.Ilce.Il.Id,
-                            Ad = t.Mahalle.Ilce.Il.Ad
-                        }
-                    }
-                }
+                MahalleId = t.MahalleId
             })
             .ToListAsync();
     }
@@ -101,7 +61,7 @@ public class TasinmazService : ITasinmazService
                 Koordinat = dto.Koordinat,
                 Adres = dto.Adres,
                 MahalleId = dto.MahalleId,
-                UserId = 1 // Burayı dinamik yapmalısın, şimdilik örnek sabit ID
+                UserId = 1 // Burayı ileride dinamik yapacaksın
             };
 
             _context.Tasinmazlar.Add(tasinmaz);

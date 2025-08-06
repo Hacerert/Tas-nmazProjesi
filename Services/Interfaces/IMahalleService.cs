@@ -1,4 +1,5 @@
-﻿using tasinmazBackend.Dtos;
+﻿using System.Threading.Tasks;
+using tasinmazBackend.Dtos;
 
 namespace tasinmazBackend.Services.Interfaces
 {
@@ -6,5 +7,6 @@ namespace tasinmazBackend.Services.Interfaces
     {
         Task<List<MahalleDto>> GetAllAsync();
         Task<MahalleDto> CreateAsync(MahalleDto dto);
+        Task<List<MahalleDto>> GetAsync(int ilceId);
     }
 }

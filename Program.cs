@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<IMahalleService, MahalleService>();
 
 // CORS Policy (GEÇİCİ OLARAK TÜM KAYNAKLARA İZİN VERİYORUZ - DEBUG AMAÇLI)
 builder.Services.AddCors(options =>
@@ -29,7 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Servisleri ekle
 builder.Services.AddScoped<IIlService, IlService>();
 builder.Services.AddScoped<IIlceService, IlceService>();
-builder.Services.AddScoped<IMahalleService, MahalleService>();
+builder.Services.AddScoped<MahalleService, MahalleService>();
 builder.Services.AddScoped<ITasinmazService, TasinmazService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILogService, LogService>();

@@ -31,5 +31,12 @@ namespace tasinmazBackend.Controllers
             var created = await _mahalleService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetAll), new { id = created.Id }, created);
         }
+        [HttpGet("{idId}")]
+        public async Task<IActionResult> Get(int ılceId)
+        {
+            var mahalleler = await _mahalleService.GetAsync(ılceId);
+            return Ok(mahalleler);
+        }
+
     }
 }

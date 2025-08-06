@@ -53,5 +53,10 @@ namespace tasinmazBackend.Services
             dto.Id = mahalle.Id;
             return dto;
         }
+
+        public Task<List<MahalleDto>> GetAsync(int ilceId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

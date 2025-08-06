@@ -9,6 +9,6 @@
         public string Koordinat { get; set; } = null!;
         public string Adres { get; set; } = null!;
         public int MahalleId { get; set; }
-        public MahalleDto? Mahalle { get; set; } 
+ 
     }
 }
