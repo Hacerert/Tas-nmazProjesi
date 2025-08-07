@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using tasinmazBackend.Dtos;
 using tasinmazBackend.Services.Interfaces;
 
@@ -32,7 +32,7 @@ namespace tasinmazBackend.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = created.Id }, created);
         }
 
-        [HttpGet("{idId}")]
+        [HttpGet("{ilId}")]
         public async Task<IActionResult> Get(int ilId)
         {
             var ilceler = await _ilceService.GetAsync(ilId);

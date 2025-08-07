@@ -1,4 +1,4 @@
-﻿// tasinmazBackend/Controllers/UserController.cs
+// tasinmazBackend/Controllers/UserController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
