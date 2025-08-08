@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @tasinmazBackend_HostAddress = http://localhost:5051
+=======
+@tasinmazBackend_HostAddress = http://localhost:5151
+>>>>>>> 111c321c08b5bab01e99e913f78a936f81cc6d96
 
 GET {{tasinmazBackend_HostAddress}}/weatherforecast/
 Accept: application/json

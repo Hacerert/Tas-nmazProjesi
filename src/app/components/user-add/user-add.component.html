@@ -1,0 +1,106 @@
+<!-- src/app/components/user-add/user-add.component.html -->
+<div class="user-add-bg">
+  <div class="user-add-box">
+    <h2 class="user-add-title">Yeni Kullanıcı Ekle</h2>
+
+    
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Kullanıcı Adı -->
+      <div>
+        <label for="username">Kullanıcı Adı</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          placeholder="Kullanıcı adını giriniz"
+          [disabled]="loading"
+        >
+        <div *ngIf="username?.invalid && username?.touched" class="error-msg">
+          Kullanıcı adı zorunludur.
+        </div>
+      </div>
+
+      <!-- E-posta -->
+      <div>
+        <label for="email">E-posta</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="E-posta adresini giriniz"
+          [disabled]="loading"
+        >
+        <div *ngIf="email?.invalid && email?.touched" class="error-msg">
+          <span *ngIf="email?.errors?.['required']">E-posta adresi zorunludur.</span>
+          <span *ngIf="email?.errors?.['email']">Geçerli bir e-posta adresi giriniz.</span>
+        </div>
+      </div>
+
+      <!-- Rol -->
+      <div>
+        <label for="role">Rol</label>
+        <select
+          id="role"
+          formControlName="role"
+          [disabled]="loading"
+        >
+          <option value="" disabled selected>Rol seçiniz</option>
+          <option *ngFor="let roleOption of roles" [value]="roleOption">{{ roleOption }}</option>
+        </select>
+        <div *ngIf="role?.invalid && role?.touched" class="error-msg">
+          Rol seçimi zorunludur.
+        </div>
+      </div>
+
+      <!-- Şifre -->
+      <div class="user-add-grid">
+        <div>
+          <label for="password">Şifre</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="Şifrenizi giriniz"
+            [disabled]="loading"
+          >
+          <div *ngIf="password?.invalid && password?.touched" class="error-msg">
+            <span *ngIf="password?.errors?.['required']">Şifre zorunludur.</span>
+            <span *ngIf="password?.errors?.['minlength']">Şifre en az 6 karakter olmalıdır.</span>
+          </div>
+        </div>
+
+        <!-- Şifre Tekrarı -->
+        <div>
+          <label for="confirmPassword">Şifre Tekrarı</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Şifrenizi tekrar giriniz"
+            [disabled]="loading"
+          >
+          <div *ngIf="(confirmPassword?.invalid && confirmPassword?.touched) || (userForm.errors?.['passwordMismatch'] && confirmPassword?.touched)" class="error-msg">
+            <span *ngIf="confirmPassword?.errors?.['required']">Şifre tekrarı zorunludur.</span>
+            <span *ngIf="userForm.errors?.['passwordMismatch']">Şifreler eşleşmiyor.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hata Mesajı -->
+      <div *ngIf="error" class="error-msg">
+        {{ error }}
+      </div>
+
+      <button type="submit" [disabled]="userForm.invalid || loading" class="user-add-btn">
+        <span *ngIf="loading" class="spinner-border"></span>
+        <span *ngIf="!loading">Kullanıcı Ekle</span>
+        <span *ngIf="loading">Ekleniyor...</span>
+      </button>
+
+      <div class="back-link">
+        <a (click)="goBack()" style="cursor: pointer;">← Kullanıcı Listesine Dön</a>
+      </div>
+    </form>
+  </div>
+</div>

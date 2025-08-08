@@ -1,3 +1,163 @@
+<<<<<<< HEAD
 .vs/
 obj/
 bin/
+=======
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Combined ignore rules for Angular (Frontend) and .NET (Backend) projects.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+[Bb]in/
+[Oo]bj/
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vs/
+.vs/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+*.code-workspace
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+mono_crash.*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Ll]og/
+[Ll]ogs/
+Generated\ Files/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+*.binlog
+
+# StyleCop
+StyleCopReport.xml
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# ASP.NET & Azure
+publish/
+*.[Pp]ublish.xml
+*.azurePubxml
+*.pubxml
+*.publishproj
+PublishScripts/
+csx/
+ecf/
+rcf/
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# System files (macOS & Windows)
+.DS_Store
+.AppleDouble
+._*
+Icon?
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Miscellaneous
+/.angular/cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+.sass-cache/
+>>>>>>> 111c321c08b5bab01e99e913f78a936f81cc6d96

@@ -1,0 +1,139 @@
+<!-- src/app/login/login.component.html -->
+<div class="login-bg">
+  <div class="login-box">
+    <h2 class="login-title">Giriş Yap</h2>
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+      <div class="login-group">
+        <label for="username">Kullanıcı Adı</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          [(ngModel)]="username"
+          required
+          class="login-input"
+        />
+      </div>
+      <div class="login-group">
+        <label for="password">Şifre</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          class="login-input"
+        />
+      </div>
+      <div *ngIf="errorMessage" class="login-error">
+        {{ errorMessage }}
+      </div>
+      <button
+        type="submit"
+        class="login-btn"
+        [disabled]="!loginForm.valid"
+        routerLink="/tasinmaz-list"
+      >
+        Giriş Yap
+      </button>
+      <div class="login-link">
+        <a routerLink="/register">Hesabın yok mu? Kayıt ol</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.login-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #34d0ff;
+}
+
+.login-box {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.13);
+  padding: 36px 32px 28px 32px;
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.login-group {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.login-group label {
+  display: block;
+  font-weight: 600;
+  color: #232526;
+  margin-bottom: 6px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #bdbdbd;
+  border-radius: 7px;
+  font-size: 1rem;
+  background: #f4f8fb;
+  transition: border 0.2s;
+}
+
+.login-input:focus {
+  border-color: #1976d2;
+  outline: none;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px 0;
+  background: linear-gradient(90deg, #1976d2 0%, #21cbf3 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.08rem;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.13);
+  transition: background 0.18s, transform 0.13s;
+  margin-top: 8px;
+}
+
+.login-btn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.login-link {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.login-link a {
+  color: #1976d2;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.login-error {
+  margin-top: 10px;
+  color: #d7263d;
+  font-weight: 700;
+  text-align: center;
+}
+</style>
