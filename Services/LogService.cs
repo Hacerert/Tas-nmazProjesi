@@ -1,4 +1,4 @@
-﻿using tasinmazBackend.Data;
+using tasinmazBackend.Data;
 using tasinmazBackend.Entitiy;
 using tasinmazBackend.Services.Interfaces;
 
